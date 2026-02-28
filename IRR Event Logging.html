@@ -12,27 +12,25 @@ body {
     padding: 30px;
 }
 
-.wrapper { width: 1100px; margin: auto; }
+.wrapper { width: 1100px; margin: auto; position: relative; }
+
+.logo {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.logo img {
+    width: 220px; /* justert størrelse */
+}
 
 .header {
     text-align: center;
+    margin-bottom: 40px;
 }
 
-.header img {
-    width: 180px;
-    margin-top: 10px;
-}
-
-h1 { 
-    margin-bottom: 0; 
-    text-align: center;
-}
-
-.rev { 
-    font-style: italic; 
-    margin-bottom: 20px; 
-    text-align: center;
-}
+h1 { margin-bottom: 0; }
+.rev { font-style: italic; margin-bottom: 20px; }
 
 .section-number {
     background: yellow;
@@ -119,10 +117,13 @@ button {
 
 <div class="wrapper">
 
+<div class="logo">
+    <img src="safety-logo.png" alt="Safety Logo">
+</div>
+
 <div class="header">
 <h1>IRR Event Logger</h1>
 <div class="rev">Rev 1.6</div>
-<img src="safety.png" alt="Safety Logo">
 </div>
 
 <!-- SECTION 1 -->
@@ -142,7 +143,6 @@ Date:
 
 Pax Figures:
 <input id="pax" class="small">
-
 </div>
 </div>
 
@@ -225,7 +225,6 @@ Remark (Optional Freetext):
 
 <button class="generate-btn" onclick="generate()">Generate</button>
 <span id="ready" class="green-text"></span>
-
 </div>
 </div>
 
@@ -245,7 +244,6 @@ Remark (Optional Freetext):
 
 </div>
 
-<!-- Custom Modal -->
 <div class="modal-overlay" id="modal">
     <div class="modal-box">
         <div id="modal-message"></div>
@@ -256,7 +254,6 @@ Remark (Optional Freetext):
 
 <script>
 
-// ENTER moves to next field
 document.querySelectorAll("input, select").forEach((el, index, arr) => {
     el.addEventListener("keydown", function(e) {
         if (e.key === "Enter") {
@@ -284,14 +281,26 @@ function closeModal() {
     document.getElementById("modal").style.display = "none";
 }
 
+function validateSelects() {
+    let selects = document.querySelectorAll("select");
+    for (let s of selects) {
+        if (s.value === "Select") {
+            showModal("All dropdown fields must be selected before generating the report.");
+            return false;
+        }
+    }
+    return true;
+}
+
 function generate() {
+
+    if (!validateSelects()) return;
 
     let irrValue = irr.value;
     let reasonValue = reason.value;
     let remarkValue = remark.value.trim();
 
     let code = "";
-
     if (irrValue === "Cancelled") code = "CNL";
     if (irrValue === "Delayed") code = "DLY";
     if (irrValue === "Diversion") code = "DIV";
