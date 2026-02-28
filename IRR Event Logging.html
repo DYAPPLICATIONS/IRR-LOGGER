@@ -21,7 +21,7 @@ body {
 }
 
 .logo img {
-    width: 220px; /* justert størrelse */
+    width: 220px;
 }
 
 .header {
@@ -91,7 +91,6 @@ button {
     margin-top: 5px;
 }
 
-/* Custom modal */
 .modal-overlay {
     display: none;
     position: fixed;
@@ -118,12 +117,12 @@ button {
 <div class="wrapper">
 
 <div class="logo">
-    <img src="safety-logo.png" alt="safety-logo.png">
+    <img src="./safety-logo.png" alt="Safety Logo">
 </div>
 
 <div class="header">
 <h1>IRR Event Logger</h1>
-<div class="rev">Rev 2.1</div>
+<div class="rev">Rev 2.2</div>
 </div>
 
 <!-- SECTION 1 -->
@@ -254,22 +253,23 @@ Remark (Optional Freetext):
 
 <script>
 
-document.querySelectorAll("input, select").forEach((el, index, arr) => {
-    el.addEventListener("keydown", function(e) {
-        if (e.key === "Enter") {
-            e.preventDefault();
-            let next = arr[index + 1];
-            if (next) next.focus();
-        }
-    });
-});
-
 function setToday() {
     let today = new Date();
-    let day = today.getDate();
+    let day = String(today.getDate()).padStart(2, '0');
     let month = today.toLocaleString("en-US", { month: "short" }).toUpperCase();
     let year = today.getFullYear().toString().slice(-2);
     document.getElementById("date").value = `${day}${month}${year}`;
+}
+
+function formatDate(input) {
+    let match = input.trim().match(/^(\d{1,2})([a-zA-Z]{3})(\d{2})$/);
+    if (!match) return input.toUpperCase();
+
+    let day = match[1].padStart(2, '0');
+    let month = match[2].toUpperCase();
+    let year = match[3];
+
+    return `${day}${month}${year}`;
 }
 
 function showModal(message) {
@@ -294,7 +294,17 @@ function validateSelects() {
 
 function generate() {
 
+    let flightValue = flight.value.trim();
+    let paxValue = pax.value.trim();
+
+    if (flightValue === "" || paxValue === "" || Number(paxValue) === 0) {
+        showModal("Missing flight details");
+        return;
+    }
+
     if (!validateSelects()) return;
+
+    let formattedDate = formatDate(date.value);
 
     let irrValue = irr.value;
     let reasonValue = reason.value;
@@ -310,12 +320,12 @@ function generate() {
         return;
     }
 
-    let header = `${flight.value.toUpperCase()} ${date.value} ${code}`;
+    let header = `${flightValue.toUpperCase()} ${formattedDate} ${code}`;
 
     let text =
 `${header}
 Reason : ${reasonValue}
-Pax Figures : ${pax.value}
+Pax Figures : ${paxValue}
 Rebooking : ${rebooking.value}
 Rebooking Solution : ${solution.value}
 Spare AC : ${spare.value}
