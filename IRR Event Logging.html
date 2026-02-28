@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>IRR Event Logger</title>
+
+<style>
+body {
+    font-family: Calibri, Arial, sans-serif;
+    background: radial-gradient(#cfcfcf 1px, transparent 1px);
+    background-size: 6px 6px;
+    padding: 30px;
+}
+
+.wrapper { width: 1100px; margin: auto; }
+
+.header {
+    text-align: center;
+}
+
+.header img {
+    width: 180px;
+    margin-top: 10px;
+}
+
+h1 { 
+    margin-bottom: 0; 
+    text-align: center;
+}
+
+.rev { 
+    font-style: italic; 
+    margin-bottom: 20px; 
+    text-align: center;
+}
+
+.section-number {
+    background: yellow;
+    display: inline-block;
+    padding: 2px 8px;
+    font-weight: bold;
+}
+
+.box {
+    background: #d9d9d9;
+    border: 2px solid black;
+    padding: 15px;
+    margin-top: 10px;
+}
+
+input, select {
+    background: #ffc000;
+    border: 1px solid black;
+    padding: 3px;
+    font-family: Calibri;
+}
+
+input.small { width: 100px; }
+input.medium { width: 160px; }
+input.long { width: 450px; }
+select.medium { width: 180px; }
+select.long { width: 520px; }
+
+button {
+    padding: 6px 14px;
+    font-weight: bold;
+    cursor: pointer;
+    border: 1px solid black;
+}
+
+.reset-btn { background: red; color: white; }
+.generate-btn { background: #92d050; }
+.copy-btn { background: #bdd7ee; }
+
+.green-text {
+    color: green;
+    font-style: italic;
+    margin-left: 15px;
+}
+
+.output-box {
+    background: #efefef;
+    border: 2px solid #1f7a3f;
+    padding: 10px;
+    height: 240px;
+    width: 750px;
+    white-space: pre-wrap;
+}
+
+.copy-hint {
+    text-align: center;
+    font-style: italic;
+    margin-top: 5px;
+}
+
+/* Custom modal */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+}
+
+.modal-box {
+    background: white;
+    width: 350px;
+    padding: 20px;
+    margin: 15% auto;
+    text-align: center;
+    border: 2px solid black;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<div class="header">
+<h1>IRR Event Logger</h1>
+<div class="rev">Rev 1.6</div>
+<img src="safety.png" alt="Safety Logo">
+</div>
+
+<!-- SECTION 1 -->
+<div>
+<span class="section-number">1)</span>
+<div class="box" style="width:500px;">
+<b>Regarding flight</b>
+<button class="reset-btn" style="float:right;" onclick="resetForm()">Reset</button>
+<br><br>
+
+Flightnumber:
+<input id="flight" class="medium"><br><br>
+
+Date:
+<input id="date" class="medium">
+<button onclick="setToday()">Set todays date</button><br><br>
+
+Pax Figures:
+<input id="pax" class="small">
+
+</div>
+</div>
+
+<br>
+
+<!-- SECTION 2 -->
+<div>
+<span class="section-number">2)</span>
+<div class="box" style="width:1000px;">
+<b>Specify Irregularity</b>
+<br><br>
+
+Irregularity:
+<select id="irr" class="medium">
+<option>Select</option>
+<option>Cancelled</option>
+<option>Delayed</option>
+<option>Diversion</option>
+</select>
+
+&nbsp;&nbsp;
+
+Reason for cancellation:
+<select id="reason" class="medium">
+<option>Select</option>
+<option>Technical</option>
+<option>Weather</option>
+<option>Operational</option>
+<option>Other</option>
+</select>
+
+&nbsp;&nbsp;
+
+Rebooking:
+<select id="rebooking" class="medium">
+<option>Select</option>
+<option>Yes</option>
+<option>No</option>
+</select>
+
+<br><br>
+
+Rebooking Solution:
+<select id="solution" class="long">
+<option>Select</option>
+<option>No alternative option available</option>
+<option>First available option</option>
+<option>Ground transport arranged</option>
+<option>No alternative transport available (pax must arrange own transport and get refund)</option>
+<option>Recovery flight arranged</option>
+</select>
+
+<br><br>
+
+Spare AC:
+<select id="spare" class="medium">
+<option>Select</option>
+<option>Used</option>
+<option>Not available</option>
+<option>Not applicable. Would cause longer final delay.</option>
+</select>
+
+&nbsp;&nbsp;
+
+Wetlease:
+<select id="wetlease" class="medium">
+<option>Select</option>
+<option>Wetlease arranged</option>
+<option>Not an option, would cause longer delay</option>
+<option>Not an option due to availability</option>
+</select>
+
+<br><br>
+
+Remark (Optional Freetext):
+<br>
+<input id="remark" class="long">
+
+<br><br>
+
+<button class="generate-btn" onclick="generate()">Generate</button>
+<span id="ready" class="green-text"></span>
+
+</div>
+</div>
+
+<br>
+
+<!-- SECTION 3 -->
+<div>
+<span class="section-number">3)</span>
+<div class="box" style="width:800px;">
+<b>Copy to 15below</b>
+<br><br>
+<button class="copy-btn" onclick="copyText()">Copy</button>
+<div id="output" class="output-box"></div>
+<div class="copy-hint">Press CTRL + C to copy</div>
+</div>
+</div>
+
+</div>
+
+<!-- Custom Modal -->
+<div class="modal-overlay" id="modal">
+    <div class="modal-box">
+        <div id="modal-message"></div>
+        <br>
+        <button onclick="closeModal()">OK</button>
+    </div>
+</div>
+
+<script>
+
+// ENTER moves to next field
+document.querySelectorAll("input, select").forEach((el, index, arr) => {
+    el.addEventListener("keydown", function(e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            let next = arr[index + 1];
+            if (next) next.focus();
+        }
+    });
+});
+
+function setToday() {
+    let today = new Date();
+    let day = today.getDate();
+    let month = today.toLocaleString("en-US", { month: "short" }).toUpperCase();
+    let year = today.getFullYear().toString().slice(-2);
+    document.getElementById("date").value = `${day}${month}${year}`;
+}
+
+function showModal(message) {
+    document.getElementById("modal-message").innerText = message;
+    document.getElementById("modal").style.display = "block";
+}
+
+function closeModal() {
+    document.getElementById("modal").style.display = "none";
+}
+
+function generate() {
+
+    let irrValue = irr.value;
+    let reasonValue = reason.value;
+    let remarkValue = remark.value.trim();
+
+    let code = "";
+
+    if (irrValue === "Cancelled") code = "CNL";
+    if (irrValue === "Delayed") code = "DLY";
+    if (irrValue === "Diversion") code = "DIV";
+
+    if ((reasonValue === "Operational" || reasonValue === "Other") && remarkValue === "") {
+        showModal("Remark is mandatory under set conditions.");
+        return;
+    }
+
+    let header = `${flight.value.toUpperCase()} ${date.value} ${code}`;
+
+    let text =
+`${header}
+Reason : ${reasonValue}
+Pax Figures : ${pax.value}
+Rebooking : ${rebooking.value}
+Rebooking Solution : ${solution.value}
+Spare AC : ${spare.value}
+Wetlease : ${wetlease.value}`;
+
+    if (remarkValue !== "") {
+        text += `\nRemark: ${remarkValue}`;
+    }
+
+    document.getElementById("output").innerText = text;
+    document.getElementById("ready").innerText = "Report ready";
+}
+
+function copyText() {
+    navigator.clipboard.writeText(document.getElementById("output").innerText);
+}
+
+function resetForm() {
+    document.querySelectorAll("input").forEach(i => i.value = "");
+    document.querySelectorAll("select").forEach(s => s.selectedIndex = 0);
+    document.getElementById("output").innerText = "";
+    document.getElementById("ready").innerText = "";
+}
+
+</script>
+
+</body>
+</html>
