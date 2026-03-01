@@ -18,19 +18,21 @@ body {
     position: absolute;
     top: 0;
     right: 0;
-    text-align: right;
+    text-align: center; /* CHANGED */
+    width: 220px;       /* NEW: match image width */
 }
 
 .logo img {
     width: 220px;
 }
 
-/* NEW: Digital clock */
+/* Clock centered under image */
 .clock {
     margin-top: 10px;
     font-size: 16px;
     font-weight: bold;
     color: darkblue;
+    text-align: center; /* NEW */
 }
 
 .header {
@@ -92,7 +94,7 @@ button {
     height: 240px;
     width: 750px;
     white-space: pre-wrap;
-    font-family: "Courier New", monospace; /* NEW */
+    font-family: "Courier New", monospace;
 }
 
 .copy-hint {
@@ -264,7 +266,6 @@ Remark (Optional Freetext):
 
 <script>
 
-/* NEW: Enter + Tab navigation */
 document.querySelectorAll("input, select").forEach((el, index, arr) => {
     el.addEventListener("keydown", function(e) {
         if (e.key === "Enter") {
@@ -275,7 +276,6 @@ document.querySelectorAll("input, select").forEach((el, index, arr) => {
     });
 });
 
-/* NEW: Digital clock */
 function updateClock() {
     let now = new Date();
 
@@ -381,7 +381,14 @@ Wetlease : ${wetlease.value}`;
 }
 
 function copyText() {
-    navigator.clipboard.writeText(document.getElementById("output").innerText);
+    let outputText = document.getElementById("output").innerText.trim();
+
+    if (outputText === "") {
+        showModal("Nothing to copy. Check input fields and dropdown menus.");
+        return;
+    }
+
+    navigator.clipboard.writeText(outputText);
 }
 
 function resetForm() {
