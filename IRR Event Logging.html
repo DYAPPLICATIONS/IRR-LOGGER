@@ -18,10 +18,19 @@ body {
     position: absolute;
     top: 0;
     right: 0;
+    text-align: right;
 }
 
 .logo img {
     width: 220px;
+}
+
+/* NEW: Digital clock */
+.clock {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: darkblue;
 }
 
 .header {
@@ -83,6 +92,7 @@ button {
     height: 240px;
     width: 750px;
     white-space: pre-wrap;
+    font-family: "Courier New", monospace; /* NEW */
 }
 
 .copy-hint {
@@ -118,6 +128,7 @@ button {
 
 <div class="logo">
     <img src="./safety-logo.png" alt="Safety Logo">
+    <div id="clock" class="clock"></div>
 </div>
 
 <div class="header">
@@ -252,6 +263,36 @@ Remark (Optional Freetext):
 </div>
 
 <script>
+
+/* NEW: Enter + Tab navigation */
+document.querySelectorAll("input, select").forEach((el, index, arr) => {
+    el.addEventListener("keydown", function(e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            let next = arr[index + 1];
+            if (next) next.focus();
+        }
+    });
+});
+
+/* NEW: Digital clock */
+function updateClock() {
+    let now = new Date();
+
+    let hours = String(now.getHours()).padStart(2,'0');
+    let minutes = String(now.getMinutes()).padStart(2,'0');
+    let seconds = String(now.getSeconds()).padStart(2,'0');
+
+    let day = String(now.getDate()).padStart(2,'0');
+    let month = now.toLocaleString("en-US", { month: "short" }).toUpperCase();
+    let year = now.getFullYear().toString().slice(-2);
+
+    document.getElementById("clock").innerText =
+        `${hours}:${minutes}:${seconds} / ${day}${month}${year}`;
+}
+
+setInterval(updateClock, 1000);
+updateClock();
 
 function setToday() {
     let today = new Date();
