@@ -18,21 +18,20 @@ body {
     position: absolute;
     top: 0;
     right: 0;
-    text-align: center; /* CHANGED */
-    width: 220px;       /* NEW: match image width */
+    text-align: center;
+    width: 220px;
 }
 
 .logo img {
     width: 220px;
 }
 
-/* Clock centered under image */
 .clock {
     margin-top: 10px;
     font-size: 16px;
     font-weight: bold;
     color: darkblue;
-    text-align: center; /* NEW */
+    text-align: center;
 }
 
 .header {
@@ -97,12 +96,6 @@ button {
     font-family: "Courier New", monospace;
 }
 
-.copy-hint {
-    text-align: center;
-    font-style: italic;
-    margin-top: 5px;
-}
-
 .modal-overlay {
     display: none;
     position: fixed;
@@ -135,7 +128,7 @@ button {
 
 <div class="header">
 <h1>IRR Event Logger</h1>
-<div class="rev">Rev 2.2</div>
+<div class="rev">Rev 2.3</div>
 </div>
 
 <!-- SECTION 1 -->
@@ -250,7 +243,6 @@ Remark (Optional Freetext):
 <br><br>
 <button class="copy-btn" onclick="copyText()">Copy</button>
 <div id="output" class="output-box"></div>
-<div class="copy-hint">Press CTRL + C to copy</div>
 </div>
 </div>
 
