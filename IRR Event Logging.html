@@ -29,26 +29,20 @@ body {
     font-size: 16px;
     font-weight: bold;
     color: darkblue;
-    text-align: center;
 }
 
 .open-flight-box {
     margin-top: 15px;
     display: none;
-    text-align: center;
 }
 
 .open-flight-box button {
     margin: 5px;
 }
 
-.grey-btn { 
-    background: #bfbfbf; 
-}
+.grey-btn { background: #bfbfbf; }
 
 .header { text-align: center; margin-bottom: 40px; }
-h1 { margin-bottom: 0; }
-.rev { font-style: italic; margin-bottom: 20px; }
 
 .section-number {
     background: yellow;
@@ -74,8 +68,6 @@ input, select {
 input.small { width: 100px; }
 input.medium { width: 160px; }
 input.long { width: 450px; }
-select.medium { width: 180px; }
-select.long { width: 520px; }
 
 button {
     padding: 6px 14px;
@@ -88,12 +80,6 @@ button {
 .generate-btn { background: #92d050; }
 .copy-btn { background: #bdd7ee; }
 
-.green-text {
-    color: green;
-    font-style: italic;
-    margin-left: 15px;
-}
-
 .output-box {
     background: #efefef;
     border: 2px solid #1f7a3f;
@@ -104,6 +90,7 @@ button {
     font-family: "Courier New", monospace;
 }
 
+/* Modal */
 .modal-overlay {
     display: none;
     position: fixed;
@@ -142,11 +129,10 @@ button {
 
 <div class="header">
 <h1>IRR EVENT LOGGER</h1>
-<div class="rev">Rev 2.4</div>
+<div><i>Rev 2.4</i></div>
 </div>
 
 <!-- SECTION 1 -->
-<div>
 <span class="section-number">1)</span>
 <div class="box" style="width:500px;">
 <b>Regarding flight</b>
@@ -163,129 +149,130 @@ Date:
 Pax Figures:
 <input id="pax" class="small">
 </div>
-</div>
 
 <br>
 
 <!-- SECTION 2 -->
-<div>
 <span class="section-number">2)</span>
-<div class="box" style="width:1000px;">
-<b>Specify Irregularity</b>
-<br><br>
-
-Irregularity:
-<select id="irr" class="medium" onchange="updateReasonLabel()">
-<option>Select</option>
-<option>Cancelled</option>
-<option>Delayed</option>
-<option>Diversion</option>
-</select>
-
-&nbsp;&nbsp;
-
-<span id="reason-label">Reason for cancellation:</span>
-<select id="reason" class="medium">
-<option>Select</option>
-<option>Technical</option>
-<option>Weather</option>
-<option>Operational</option>
-<option>Other</option>
-</select>
-
-&nbsp;&nbsp;
-
-Rebooking:
-<select id="rebooking" class="medium">
-<option>Select</option>
-<option>Yes</option>
-<option>No</option>
-</select>
-
-<br><br>
-
-Rebooking Solution:
-<select id="solution" class="long">
-<option>Select</option>
-<option>No alternative option available</option>
-<option>First available option</option>
-<option>Ground transport arranged</option>
-<option>No alternative transport available (pax must arrange own transport and get refund)</option>
-<option>Recovery flight arranged</option>
-</select>
-
-<br><br>
-
-Spare AC:
-<select id="spare" class="medium">
-<option>Select</option>
-<option>Used</option>
-<option>Not available</option>
-<option>Not applicable. Would cause longer final delay.</option>
-</select>
-
-&nbsp;&nbsp;
-
-Wetlease:
-<select id="wetlease" class="medium">
-<option>Select</option>
-<option>Wetlease arranged</option>
-<option>Not an option, would cause longer delay</option>
-<option>Not an option due to availability</option>
-</select>
-
-<br><br>
-
-Remark (Optional Freetext):
-<br>
-<input id="remark" class="long">
-
-<br><br>
-
-<button class="generate-btn" onclick="generate()">Generate</button>
-<span id="ready" class="green-text"></span>
-</div>
+<div class="box" style="width:750px;">
+<b>Event Details</b><br><br>
+Type:
+<input id="eventType" class="medium"><br><br>
+Description:<br>
+<input id="description" class="long">
 </div>
 
 <br>
 
 <!-- SECTION 3 -->
-<div>
 <span class="section-number">3)</span>
-<div class="box" style="width:800px;">
-<b>Copy to 15below</b>
-<br><br>
+<div class="box" style="width:750px;">
+<b>Generate Report</b><br><br>
+
+<button class="generate-btn" onclick="generateText()">Generate</button>
 <button class="copy-btn" onclick="copyText()">Copy</button>
+
+<br><br>
+
 <div id="output" class="output-box"></div>
 </div>
-</div>
 
 </div>
 
-<div class="modal-overlay" id="modal">
-    <div class="modal-box">
-        <div id="modal-message"></div>
-        <br>
-        <button onclick="closeModal()">OK</button>
-    </div>
+<!-- MODAL -->
+<div id="modal" class="modal-overlay">
+<div class="modal-box">
+<div id="modalText"></div><br>
+<button onclick="closeModal()">OK</button>
+</div>
 </div>
 
 <script>
 
-/* ---- OPEN FLIGHT BUTTONS ---- */
+/* CLOCK */
+function updateClock(){
+    let now = new Date();
+    document.getElementById("clock").innerText =
+        now.toUTCString().slice(17,22) + " UTC";
+}
+setInterval(updateClock,1000);
+updateClock();
 
+/* SHOW TIDY/BONO */
 function checkOpenFlightButtons() {
-    let flightValue = document.getElementById("flight").value.trim();
-    let dateValue = document.getElementById("date").value.trim();
-    let box = document.getElementById("openFlightBox");
-
-    if (flightValue !== "" && dateValue !== "") {
-        box.style.display = "block";
-    } else {
-        box.style.display = "none";
-    }
+    let flight = document.getElementById("flight").value.trim();
+    let date = document.getElementById("date").value.trim();
+    document.getElementById("openFlightBox").style.display =
+        (flight && date) ? "block" : "none";
 }
 
+/* DATE TODAY */
+function setToday(){
+    let d = new Date();
+    let day = String(d.getUTCDate()).padStart(2,'0');
+    let monthNames = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+    let month = monthNames[d.getUTCMonth()];
+    let year = String(d.getUTCFullYear()).slice(2);
+    document.getElementById("date").value = day + month + year;
+    checkOpenFlightButtons();
+}
+
+/* GENERATE */
+function generateText(){
+    let flight = document.getElementById("flight").value;
+    let date = document.getElementById("date").value;
+    let pax = document.getElementById("pax").value;
+    let type = document.getElementById("eventType").value;
+    let desc = document.getElementById("description").value;
+
+    if(!flight || !date){
+        showModal("Flight number and date required.");
+        return;
+    }
+
+    let output =
+`FLIGHT: ${flight}
+DATE: ${date}
+PAX: ${pax}
+
+EVENT TYPE: ${type}
+DESCRIPTION:
+${desc}`;
+
+    document.getElementById("output").innerText = output;
+    showModal("Report generated.");
+}
+
+/* COPY */
+function copyText(){
+    let text = document.getElementById("output").innerText;
+    if(!text){
+        showModal("Nothing to copy.");
+        return;
+    }
+    navigator.clipboard.writeText(text);
+    showModal("Copied to clipboard.");
+}
+
+/* RESET */
+function resetForm(){
+    document.querySelectorAll("input").forEach(i => i.value = "");
+    document.getElementById("output").innerText = "";
+    checkOpenFlightButtons();
+    showModal("Form reset.");
+}
+
+/* MODAL */
+function showModal(msg){
+    document.getElementById("modalText").innerText = msg;
+    document.getElementById("modal").style.display = "block";
+}
+
+function closeModal(){
+    document.getElementById("modal").style.display = "none";
+}
+
+/* TIDY/BONO */
 function convertDateFormats() {
     let input = document.getElementById("date").value.trim();
     let match = input.match(/^(\d{1,2})([A-Za-z]{3})(\d{2})$/);
@@ -309,77 +296,24 @@ function convertDateFormats() {
     };
 }
 
-function openTidy() {
-    let flight = document.getElementById("flight").value.trim().toUpperCase();
-    let dates = convertDateFormats();
-    if (!dates) return;
-
-    let url = `https://tidy.nas.dev/View/CDM/CDMFlightDetails.aspx?flightid=${flight}&flightdate=${dates.tidy}`;
-    window.open(url, "_blank");
+function openTidy(){
+    let flight = document.getElementById("flight").value.toUpperCase();
+    let d = convertDateFormats();
+    if(!d) return;
+    window.open(
+`https://tidy.nas.dev/View/CDM/CDMFlightDetails.aspx?flightid=${flight}&flightdate=${d.tidy}`,
+"_blank");
 }
 
-function openBono() {
-    let flight = document.getElementById("flight").value.trim().toUpperCase();
-    let dates = convertDateFormats();
-    if (!dates) return;
-
-    let url = `https://bono.nas.dev/nas/actions/flightreport/flightreport.action?searchBy=flightAndDate&flight=${flight}&flightDate=${dates.bono}&includeDeleted=false&limit=300&offset=0`;
-    window.open(url, "_blank");
+function openBono(){
+    let flight = document.getElementById("flight").value.toUpperCase();
+    let d = convertDateFormats();
+    if(!d) return;
+    window.open(
+`https://bono.nas.dev/nas/actions/flightreport/flightreport.action?searchBy=flightAndDate&flight=${flight}&flightDate=${d.bono}&includeDeleted=false&limit=300&offset=0`,
+"_blank");
 }
-
-/* ---- EXISTING ORIGINAL LOGIC ---- */
-
-function updateReasonLabel() {
-    let irrValue = document.getElementById("irr").value;
-    let label = document.getElementById("reason-label");
-
-    if (irrValue === "Delayed") {
-        label.innerText = "Reason for delay:";
-    } else if (irrValue === "Diversion") {
-        label.innerText = "Reason for diversion:";
-    } else {
-        label.innerText = "Reason for cancellation:";
-    }
-}
-
-document.querySelectorAll("input, select").forEach((el, index, arr) => {
-    el.addEventListener("keydown", function(e) {
-        if (e.key === "Enter") {
-            e.preventDefault();
-            let next = arr[index + 1];
-            if (next) next.focus();
-        }
-    });
-});
-
-function updateClock() {
-    let now = new Date();
-    let hours = String(now.getHours()).padStart(2,'0');
-    let minutes = String(now.getMinutes()).padStart(2,'0');
-    let seconds = String(now.getSeconds()).padStart(2,'0');
-    let day = String(now.getDate()).padStart(2,'0');
-    let month = now.toLocaleString("en-US", { month: "short" }).toUpperCase();
-    let year = now.getFullYear().toString().slice(-2);
-
-    document.getElementById("clock").innerText =
-        `${hours}:${minutes}:${seconds} / ${day}${month}${year}`;
-}
-
-setInterval(updateClock, 1000);
-updateClock();
-
-function setToday() {
-    let today = new Date();
-    let day = String(today.getDate()).padStart(2, '0');
-    let month = today.toLocaleString("en-US", { month: "short" }).toUpperCase();
-    let year = today.getFullYear().toString().slice(-2);
-    document.getElementById("date").value = `${day}${month}${year}`;
-    checkOpenFlightButtons();
-}
-
-/* generate(), copyText(), resetForm() remain exactly as your previous working version */
 
 </script>
-
 </body>
 </html>
