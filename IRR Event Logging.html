@@ -128,7 +128,7 @@ button {
 
 <div class="header">
 <h1>IRR Event Logger</h1>
-<div class="rev">Rev 2.3</div>
+<div class="rev">Rev 2.4</div>
 </div>
 
 <!-- SECTION 1 -->
@@ -161,7 +161,7 @@ Pax Figures:
 <br><br>
 
 Irregularity:
-<select id="irr" class="medium">
+<select id="irr" class="medium" onchange="updateReasonLabel()">
 <option>Select</option>
 <option>Cancelled</option>
 <option>Delayed</option>
@@ -170,7 +170,7 @@ Irregularity:
 
 &nbsp;&nbsp;
 
-Reason for cancellation:
+<span id="reason-label">Reason for cancellation:</span>
 <select id="reason" class="medium">
 <option>Select</option>
 <option>Technical</option>
@@ -258,6 +258,19 @@ Remark (Optional Freetext):
 
 <script>
 
+function updateReasonLabel() {
+    let irrValue = document.getElementById("irr").value;
+    let label = document.getElementById("reason-label");
+
+    if (irrValue === "Delayed") {
+        label.innerText = "Reason for delay:";
+    } else if (irrValue === "Diversion") {
+        label.innerText = "Reason for diversion:";
+    } else {
+        label.innerText = "Reason for cancellation:";
+    }
+}
+
 document.querySelectorAll("input, select").forEach((el, index, arr) => {
     el.addEventListener("keydown", function(e) {
         if (e.key === "Enter") {
@@ -270,11 +283,9 @@ document.querySelectorAll("input, select").forEach((el, index, arr) => {
 
 function updateClock() {
     let now = new Date();
-
     let hours = String(now.getHours()).padStart(2,'0');
     let minutes = String(now.getMinutes()).padStart(2,'0');
     let seconds = String(now.getSeconds()).padStart(2,'0');
-
     let day = String(now.getDate()).padStart(2,'0');
     let month = now.toLocaleString("en-US", { month: "short" }).toUpperCase();
     let year = now.getFullYear().toString().slice(-2);
@@ -351,6 +362,10 @@ function generate() {
     if ((reasonValue === "Operational" || reasonValue === "Other") && remarkValue === "") {
         showModal("Remark is mandatory under set conditions.");
         return;
+    }
+
+    if (remarkValue !== "") {
+        remarkValue = remarkValue.charAt(0).toUpperCase() + remarkValue.slice(1);
     }
 
     let header = `${flightValue.toUpperCase()} ${formattedDate} ${code}`;
