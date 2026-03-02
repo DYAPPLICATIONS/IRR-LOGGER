@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>IRR EVENT LOGGER</title>
+<title>IRR Event Logger</title>
 
 <style>
 body {
@@ -22,7 +22,9 @@ body {
     width: 220px;
 }
 
-.logo img { width: 220px; }
+.logo img {
+    width: 220px;
+}
 
 .clock {
     margin-top: 10px;
@@ -32,18 +34,10 @@ body {
     text-align: center;
 }
 
-.open-flight-box {
-    display: none;
-    margin-top: 10px;
+.header {
     text-align: center;
+    margin-bottom: 40px;
 }
-
-.open-flight-box button {
-    background: #bfbfbf;
-    margin: 4px;
-}
-
-.header { text-align: center; margin-bottom: 40px; }
 
 h1 { margin-bottom: 0; }
 .rev { font-style: italic; margin-bottom: 20px; }
@@ -130,17 +124,10 @@ button {
 <div class="logo">
     <img src="./safety-logo.png" alt="Safety Logo">
     <div id="clock" class="clock"></div>
-
-    <!-- NEW BLOCK (only addition) -->
-    <div id="openFlightBox" class="open-flight-box">
-        <div><b>Open flight in:</b></div>
-        <button onclick="openTidy()">TIDY</button>
-        <button onclick="openBono()">BONO</button>
-    </div>
 </div>
 
 <div class="header">
-<h1>IRR EVENT LOGGER</h1>
+<h1>IRR Event Logger</h1>
 <div class="rev">Rev 2.4</div>
 </div>
 
@@ -153,10 +140,10 @@ button {
 <br><br>
 
 Flightnumber:
-<input id="flight" class="medium" oninput="checkFlightButtons()"><br><br>
+<input id="flight" class="medium"><br><br>
 
 Date:
-<input id="date" class="medium" oninput="checkFlightButtons()">
+<input id="date" class="medium">
 <button onclick="setToday()">Set todays date</button><br><br>
 
 Pax Figures:
@@ -262,75 +249,19 @@ Remark (Optional Freetext):
 </div>
 
 <div class="modal-overlay" id="modal">
-<div class="modal-box">
-<div id="modal-message"></div>
-<br>
-<button onclick="closeModal()">OK</button>
-</div>
+    <div class="modal-box">
+        <div id="modal-message"></div>
+        <br>
+        <button onclick="closeModal()">OK</button>
+    </div>
 </div>
 
 <script>
 
-/* SHOW BUTTONS */
-function checkFlightButtons() {
-    let flight = document.getElementById("flight").value.trim();
-    let date = document.getElementById("date").value.trim();
-    document.getElementById("openFlightBox").style.display =
-        (flight !== "" && date !== "") ? "block" : "none";
-}
-
-/* DATE CONVERSION */
-function convertDate() {
-    let input = document.getElementById("date").value.trim();
-    let match = input.match(/^(\d{1,2})([A-Za-z]{3})(\d{2})$/);
-    if (!match) return null;
-
-    let day = match[1].padStart(2,'0');
-    let monthStr = match[2].toUpperCase();
-    let year = "20" + match[3];
-
-    const months = {
-        JAN:"03", FEB:"02", MAR:"03", APR:"04", MAY:"05", JUN:"06",
-        JUL:"07", AUG:"08", SEP:"09", OCT:"10", NOV:"11", DEC:"12"
-    };
-
-    const map = {
-        JAN:"01", FEB:"02", MAR:"03", APR:"04", MAY:"05", JUN:"06",
-        JUL:"07", AUG:"08", SEP:"09", OCT:"10", NOV:"11", DEC:"12"
-    };
-
-    let month = map[monthStr];
-    if (!month) return null;
-
-    return {
-        tidy: `${day}/${month}/${year}`,
-        bono: `${day}-${month}-${year}`
-    };
-}
-
-function openTidy() {
-    let flight = document.getElementById("flight").value.toUpperCase();
-    let d = convertDate();
-    if (!d) return;
-    window.open(
-`https://tidy.nas.dev/View/CDM/CDMFlightDetails.aspx?flightid=${flight}&flightdate=${d.tidy}`,
-"_blank");
-}
-
-function openBono() {
-    let flight = document.getElementById("flight").value.toUpperCase();
-    let d = convertDate();
-    if (!d) return;
-    window.open(
-`https://bono.nas.dev/nas/actions/flightreport/flightreport.action?searchBy=flightAndDate&flight=${flight}&flightDate=${d.bono}&includeDeleted=false&limit=300&offset=0`,
-"_blank");
-}
-
-/* EXISTING LOGIC BELOW — UNCHANGED */
-
 function updateReasonLabel() {
     let irrValue = document.getElementById("irr").value;
     let label = document.getElementById("reason-label");
+
     if (irrValue === "Delayed") {
         label.innerText = "Reason for delay:";
     } else if (irrValue === "Diversion") {
@@ -358,6 +289,7 @@ function updateClock() {
     let day = String(now.getDate()).padStart(2,'0');
     let month = now.toLocaleString("en-US", { month: "short" }).toUpperCase();
     let year = now.getFullYear().toString().slice(-2);
+
     document.getElementById("clock").innerText =
         `${hours}:${minutes}:${seconds} / ${day}${month}${year}`;
 }
@@ -371,10 +303,107 @@ function setToday() {
     let month = today.toLocaleString("en-US", { month: "short" }).toUpperCase();
     let year = today.getFullYear().toString().slice(-2);
     document.getElementById("date").value = `${day}${month}${year}`;
-    checkFlightButtons();
 }
 
-/* Remaining original generate(), copyText(), resetForm(), modal logic untouched */
+function formatDate(input) {
+    let match = input.trim().match(/^(\d{1,2})([a-zA-Z]{3})(\d{2})$/);
+    if (!match) return input.toUpperCase();
+
+    let day = match[1].padStart(2, '0');
+    let month = match[2].toUpperCase();
+    let year = match[3];
+
+    return `${day}${month}${year}`;
+}
+
+function showModal(message) {
+    document.getElementById("modal-message").innerText = message;
+    document.getElementById("modal").style.display = "block";
+}
+
+function closeModal() {
+    document.getElementById("modal").style.display = "none";
+}
+
+function validateSelects() {
+    let selects = document.querySelectorAll("select");
+    for (let s of selects) {
+        if (s.value === "Select") {
+            showModal("All dropdown fields must be selected before generating the report.");
+            return false;
+        }
+    }
+    return true;
+}
+
+function generate() {
+
+    let flightValue = flight.value.trim();
+    let paxValue = pax.value.trim();
+
+    if (flightValue === "" || paxValue === "" || Number(paxValue) === 0) {
+        showModal("Missing flight details");
+        return;
+    }
+
+    if (!validateSelects()) return;
+
+    let formattedDate = formatDate(date.value);
+
+    let irrValue = irr.value;
+    let reasonValue = reason.value;
+    let remarkValue = remark.value.trim();
+
+    let code = "";
+    if (irrValue === "Cancelled") code = "CNL";
+    if (irrValue === "Delayed") code = "DLY";
+    if (irrValue === "Diversion") code = "DIV";
+
+    if ((reasonValue === "Operational" || reasonValue === "Other") && remarkValue === "") {
+        showModal("Remark is mandatory under set conditions.");
+        return;
+    }
+
+    if (remarkValue !== "") {
+        remarkValue = remarkValue.charAt(0).toUpperCase() + remarkValue.slice(1);
+    }
+
+    let header = `${flightValue.toUpperCase()} ${formattedDate} ${code}`;
+
+    let text =
+`${header}
+Reason : ${reasonValue}
+Pax Figures : ${paxValue}
+Rebooking : ${rebooking.value}
+Rebooking Solution : ${solution.value}
+Spare AC : ${spare.value}
+Wetlease : ${wetlease.value}`;
+
+    if (remarkValue !== "") {
+        text += `\nRemark: ${remarkValue}`;
+    }
+
+    document.getElementById("output").innerText = text;
+    document.getElementById("ready").innerText = "Report ready";
+}
+
+function copyText() {
+    let outputText = document.getElementById("output").innerText.trim();
+
+    if (outputText === "") {
+        showModal("Nothing to copy. Check input fields and dropdown menus.");
+        return;
+    }
+
+    navigator.clipboard.writeText(outputText);
+}
+
+function resetForm() {
+    document.querySelectorAll("input").forEach(i => i.value = "");
+    document.querySelectorAll("select").forEach(s => s.selectedIndex = 0);
+    document.getElementById("output").innerText = "";
+    document.getElementById("ready").innerText = "";
+}
 
 </script>
 
