@@ -22,15 +22,20 @@ body {
     width: 220px;
 }
 
-.logo img {
-    width: 220px;
-}
+.logo img { width: 220px; }
 
 .clock {
     margin-top: 10px;
     font-size: 16px;
     font-weight: bold;
     color: darkblue;
+    text-align: center;
+}
+
+/* NEW BLOCK */
+.open-flight-box {
+    display: none;
+    margin-top: 10px;
     text-align: center;
 }
 
@@ -124,6 +129,13 @@ button {
 <div class="logo">
     <img src="./safety-logo.png" alt="Safety Logo">
     <div id="clock" class="clock"></div>
+
+    <!-- ADDED SECTION -->
+    <div id="openFlightBox" class="open-flight-box">
+        <div><b>Open flight in:</b></div>
+        <button onclick="openTidy()">TIDY</button>
+        <button onclick="openBono()">BONO</button>
+    </div>
 </div>
 
 <div class="header">
@@ -140,10 +152,10 @@ button {
 <br><br>
 
 Flightnumber:
-<input id="flight" class="medium"><br><br>
+<input id="flight" class="medium" oninput="checkFlightButtons()"><br><br>
 
 Date:
-<input id="date" class="medium">
+<input id="date" class="medium" oninput="checkFlightButtons()">
 <button onclick="setToday()">Set todays date</button><br><br>
 
 Pax Figures:
@@ -258,6 +270,61 @@ Remark (Optional Freetext):
 
 <script>
 
+/* ---- OPEN FLIGHT BUTTON LOGIC (ADDED) ---- */
+
+function checkFlightButtons() {
+    let flight = document.getElementById("flight").value.trim();
+    let date = document.getElementById("date").value.trim();
+    document.getElementById("openFlightBox").style.display =
+        (flight !== "" && date !== "") ? "block" : "none";
+}
+
+function convertDateForSystems() {
+    let input = document.getElementById("date").value.trim().toUpperCase();
+    let match = input.match(/^(\d{1,2})([A-Z]{3})(\d{2})$/);
+    if (!match) return null;
+
+    const monthMap = {
+        JAN:"01", FEB:"02", MAR:"03", APR:"04", MAY:"05", JUN:"06",
+        JUL:"07", AUG:"08", SEP:"09", OCT:"10", NOV:"11", DEC:"12"
+    };
+
+    let day = match[1].padStart(2,'0');
+    let month = monthMap[match[2]];
+    let year = "20" + match[3];
+
+    if (!month) return null;
+
+    return {
+        tidy: `${day}/${month}/${year}`,
+        bono: `${day}-${month}-${year}`
+    };
+}
+
+function openTidy() {
+    let flight = document.getElementById("flight").value.trim().toUpperCase();
+    let dateObj = convertDateForSystems();
+    if (!dateObj) return;
+
+    window.open(
+        `https://tidy.nas.dev/View/CDM/CDMFlightDetails.aspx?flightid=${flight}&flightdate=${dateObj.tidy}`,
+        "_blank"
+    );
+}
+
+function openBono() {
+    let flight = document.getElementById("flight").value.trim().toUpperCase();
+    let dateObj = convertDateForSystems();
+    if (!dateObj) return;
+
+    window.open(
+        `https://bono.nas.dev/nas/actions/flightreport/flightreport.action?searchBy=flightAndDate&flight=${flight}&flightDate=${dateObj.bono}&includeDeleted=false&limit=300&offset=0`,
+        "_blank"
+    );
+}
+
+/* ---- YOUR ORIGINAL SCRIPT BELOW (UNCHANGED) ---- */
+
 function updateReasonLabel() {
     let irrValue = document.getElementById("irr").value;
     let label = document.getElementById("reason-label");
@@ -303,16 +370,15 @@ function setToday() {
     let month = today.toLocaleString("en-US", { month: "short" }).toUpperCase();
     let year = today.getFullYear().toString().slice(-2);
     document.getElementById("date").value = `${day}${month}${year}`;
+    checkFlightButtons();
 }
 
 function formatDate(input) {
     let match = input.trim().match(/^(\d{1,2})([a-zA-Z]{3})(\d{2})$/);
     if (!match) return input.toUpperCase();
-
     let day = match[1].padStart(2, '0');
     let month = match[2].toUpperCase();
     let year = match[3];
-
     return `${day}${month}${year}`;
 }
 
@@ -389,12 +455,10 @@ Wetlease : ${wetlease.value}`;
 
 function copyText() {
     let outputText = document.getElementById("output").innerText.trim();
-
     if (outputText === "") {
         showModal("Nothing to copy. Check input fields and dropdown menus.");
         return;
     }
-
     navigator.clipboard.writeText(outputText);
 }
 
@@ -403,6 +467,7 @@ function resetForm() {
     document.querySelectorAll("select").forEach(s => s.selectedIndex = 0);
     document.getElementById("output").innerText = "";
     document.getElementById("ready").innerText = "";
+    document.getElementById("openFlightBox").style.display = "none";
 }
 
 </script>
