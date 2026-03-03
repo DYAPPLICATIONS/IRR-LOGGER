@@ -138,7 +138,7 @@ button {
 
 <div class="header">
 <h1>IRR Event Logger</h1>
-<div class="rev">Rev 2.5</div>
+<div class="rev">Rev 2.6</div>
 </div>
 
 <!-- SECTION 1 -->
@@ -153,7 +153,7 @@ Flightnumber:
 <input id="flight" class="medium" oninput="checkFlightButtons()"><br><br>
 
 Date:
-<input id="date" class="medium" oninput="checkFlightButtons()">
+<input id="date" class="medium" oninput="checkFlightButtons()" onblur="autoFormatDate()">
 <button onclick="setToday()">Set todays date</button><br><br>
 
 Pax Figures:
@@ -208,6 +208,7 @@ Rebooking Solution:
 <option>Ground transport arranged</option>
 <option>No alternative transport available (pax must arrange own transport and get refund)</option>
 <option>Recovery flight arranged</option>
+<option>Would have caused longer delay</option>
 </select>
 
 <br><br>
@@ -268,7 +269,21 @@ Remark (Optional Freetext):
 
 <script>
 
-/* ---- OPEN FLIGHT BUTTON LOGIC ---- */
+/* ---- DATE AUTO FORMAT ---- */
+function autoFormatDate() {
+    let input = document.getElementById("date").value.trim();
+    let match = input.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
+    if (!match) return;
+
+    const months = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+    let day = match[1].padStart(2,'0');
+    let month = months[parseInt(match[2],10)-1];
+    let year = match[3].slice(-2);
+
+    document.getElementById("date").value = `${day}${month}${year}`;
+}
+
+/* ---- FULL ORIGINAL SCRIPT CONTINUES BELOW (UNCHANGED) ---- */
 
 function checkFlightButtons() {
     let flight = document.getElementById("flight").value.trim();
@@ -321,7 +336,7 @@ function openBono() {
     );
 }
 
-/* ---- ORIGINAL SCRIPT ---- */
+/* Remaining original functions exactly as you provided */
 
 function updateReasonLabel() {
     let irrValue = document.getElementById("irr").value;
