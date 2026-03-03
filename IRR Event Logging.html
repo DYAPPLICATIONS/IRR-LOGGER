@@ -32,7 +32,6 @@ body {
     text-align: center;
 }
 
-/* NEW BLOCK */
 .open-flight-box {
     display: none;
     margin-top: 10px;
@@ -130,7 +129,6 @@ button {
     <img src="./safety-logo.png" alt="Safety Logo">
     <div id="clock" class="clock"></div>
 
-    <!-- ADDED SECTION -->
     <div id="openFlightBox" class="open-flight-box">
         <div><b>Open flight in:</b></div>
         <button onclick="openTidy()">TIDY</button>
@@ -140,7 +138,7 @@ button {
 
 <div class="header">
 <h1>IRR Event Logger</h1>
-<div class="rev">Rev 2.4</div>
+<div class="rev">Rev 2.5</div>
 </div>
 
 <!-- SECTION 1 -->
@@ -270,7 +268,7 @@ Remark (Optional Freetext):
 
 <script>
 
-/* ---- OPEN FLIGHT BUTTON LOGIC (ADDED) ---- */
+/* ---- OPEN FLIGHT BUTTON LOGIC ---- */
 
 function checkFlightButtons() {
     let flight = document.getElementById("flight").value.trim();
@@ -323,7 +321,7 @@ function openBono() {
     );
 }
 
-/* ---- YOUR ORIGINAL SCRIPT BELOW (UNCHANGED) ---- */
+/* ---- ORIGINAL SCRIPT ---- */
 
 function updateReasonLabel() {
     let irrValue = document.getElementById("irr").value;
@@ -432,6 +430,8 @@ function generate() {
 
     if (remarkValue !== "") {
         remarkValue = remarkValue.charAt(0).toUpperCase() + remarkValue.slice(1);
+        remarkValue = remarkValue.replace(/\bdy/gi, "DY");
+        remarkValue = remarkValue.replace(/\bd8/gi, "D8");
     }
 
     let header = `${flightValue.toUpperCase()} ${formattedDate} ${code}`;
