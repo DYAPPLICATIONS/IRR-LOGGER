@@ -32,6 +32,26 @@ body {
     text-align: center;
 }
 
+/* WARNING BANNER */
+.warning-banner{
+    display:none;
+    margin-top:8px;
+    background:rgba(200,0,0,0.75);
+    color:white;
+    padding:8px;
+    font-size:13px;
+    border-radius:4px;
+    position:relative;
+}
+
+.warning-banner .close{
+    position:absolute;
+    right:8px;
+    top:3px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
 .open-flight-box {
     display: none;
     margin-top: 10px;
@@ -78,6 +98,12 @@ button {
     font-weight: bold;
     cursor: pointer;
     border: 1px solid black;
+    transition: transform 0.05s ease;
+}
+
+/* BUTTON PRESS EFFECT */
+button:active{
+    transform:scale(1.08);
 }
 
 .reset-btn { background: red; color: white; }
@@ -129,6 +155,12 @@ button {
     <img src="./safety-logo.png" alt="Safety Logo">
     <div id="clock" class="clock"></div>
 
+    <!-- WARNING BANNER -->
+    <div id="flightWarning" class="warning-banner">
+        Unknown flightnumber format (ensure DY or D8)
+        <span class="close" onclick="closeWarning()">×</span>
+    </div>
+
     <div id="openFlightBox" class="open-flight-box">
         <div><b>Open flight in:</b></div>
         <button onclick="openTidy()">TIDY</button>
@@ -138,7 +170,7 @@ button {
 
 <div class="header">
 <h1>IRR Event Logger</h1>
-<div class="rev">Rev 2.6</div>
+<div class="rev">rev 2.7</div>
 </div>
 
 <!-- SECTION 1 -->
@@ -150,7 +182,7 @@ button {
 <br><br>
 
 Flightnumber:
-<input id="flight" class="medium" oninput="checkFlightButtons()"><br><br>
+<input id="flight" class="medium" oninput="checkFlightButtons()" onblur="validateFlight()"><br><br>
 
 Date:
 <input id="date" class="medium" oninput="checkFlightButtons()" onblur="autoFormatDate()">
@@ -269,7 +301,7 @@ Remark (Optional Freetext):
 
 <script>
 
-/* ---- DATE AUTO FORMAT ---- */
+/* DATE AUTO FORMAT */
 function autoFormatDate() {
     let input = document.getElementById("date").value.trim();
     let match = input.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
@@ -283,7 +315,31 @@ function autoFormatDate() {
     document.getElementById("date").value = `${day}${month}${year}`;
 }
 
-/* ---- FULL ORIGINAL SCRIPT CONTINUES BELOW (UNCHANGED) ---- */
+/* FLIGHT VALIDATION */
+function validateFlight(){
+    let f=document.getElementById("flight");
+    let val=f.value.trim().toUpperCase();
+
+    if(val!=="" && !val.startsWith("DY") && !val.startsWith("D8")){
+        f.value="";
+        showWarning();
+    }
+}
+
+function showWarning(){
+    let w=document.getElementById("flightWarning");
+    w.style.display="block";
+
+    setTimeout(()=>{
+        w.style.display="none";
+    },7000);
+}
+
+function closeWarning(){
+    document.getElementById("flightWarning").style.display="none";
+}
+
+/* ORIGINAL SCRIPT CONTINUES */
 
 function checkFlightButtons() {
     let flight = document.getElementById("flight").value.trim();
@@ -336,7 +392,7 @@ function openBono() {
     );
 }
 
-/* Remaining original functions exactly as you provided */
+/* REMAINDER OF YOUR SCRIPT UNCHANGED */
 
 function updateReasonLabel() {
     let irrValue = document.getElementById("irr").value;
