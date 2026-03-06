@@ -32,7 +32,6 @@ body {
     text-align: center;
 }
 
-/* WARNING BANNER */
 .warning-banner{
     display:none;
     margin-top:8px;
@@ -101,7 +100,6 @@ button {
     transition: transform 0.05s ease;
 }
 
-/* BUTTON PRESS EFFECT */
 button:active{
     transform:scale(1.08);
 }
@@ -152,24 +150,24 @@ button:active{
 <div class="wrapper">
 
 <div class="logo">
-    <img src="./safety-logo.png" alt="Safety Logo">
-    <div id="clock" class="clock"></div>
+<img src="./safety-logo.png" alt="Safety Logo">
+<div id="clock" class="clock"></div>
 
-    <div id="flightWarning" class="warning-banner">
-        Unknown flightnumber format (ensure DY or D8)
-        <span class="close" onclick="closeWarning()">×</span>
-    </div>
+<div id="flightWarning" class="warning-banner">
+Unknown flightnumber format (ensure DY or D8)
+<span class="close" onclick="closeWarning()">×</span>
+</div>
 
-    <div id="openFlightBox" class="open-flight-box">
-        <div><b>Open flight in:</b></div>
-        <button onclick="openTidy()">TIDY</button>
-        <button onclick="openBono()">BONO</button>
-    </div>
+<div id="openFlightBox" class="open-flight-box">
+<div><b>Open flight in:</b></div>
+<button onclick="openTidy()">TIDY</button>
+<button onclick="openBono()">BONO</button>
+</div>
 </div>
 
 <div class="header">
 <h1>IRR Event Logger</h1>
-<div class="rev">Rev 2.8</div>
+<div class="rev">Rev 2.9</div>
 </div>
 
 <div>
@@ -288,237 +286,238 @@ Remark (Optional Freetext):
 </div>
 
 <div class="modal-overlay" id="modal">
-    <div class="modal-box">
-        <div id="modal-message"></div>
-        <br>
-        <button onclick="closeModal()">OK</button>
-    </div>
+<div class="modal-box">
+<div id="modal-message"></div>
+<br>
+<button onclick="closeModal()">OK</button>
+</div>
 </div>
 
 <script>
 
-/* DATE AUTO FORMAT (MODIFIED) */
 function autoFormatDate() {
 
-    let input=document.getElementById("date").value.trim();
+let input=document.getElementById("date").value.trim();
 
-    /* Support 2mar / 02mar format */
-    let shortMatch=input.match(/^(\d{1,2})([a-zA-Z]{3})$/);
+let shortMatch=input.match(/^(\d{1,2})([a-zA-Z]{3})$/);
 
-    if(shortMatch){
-        let day=shortMatch[1].padStart(2,'0');
-        let month=shortMatch[2].toUpperCase();
-        let year=new Date().getFullYear().toString().slice(-2);
-        document.getElementById("date").value=`${day}${month}${year}`;
-        return;
-    }
-
-    /* Existing dd.mm.yyyy support */
-    let match=input.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
-    if(!match)return;
-
-    const months=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
-
-    let day=match[1].padStart(2,'0');
-    let month=months[parseInt(match[2],10)-1];
-    let year=match[3].slice(-2);
-
-    document.getElementById("date").value=`${day}${month}${year}`;
+if(shortMatch){
+let day=shortMatch[1].padStart(2,'0');
+let month=shortMatch[2].toUpperCase();
+let year=new Date().getFullYear().toString().slice(-2);
+document.getElementById("date").value=`${day}${month}${year}`;
+return;
 }
 
-/* FLIGHT VALIDATION */
-function validateFlight(){
-    let f=document.getElementById("flight");
-    let val=f.value.trim().toUpperCase();
+let match=input.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
+if(!match)return;
 
-    if(val!=="" && !val.startsWith("DY") && !val.startsWith("D8")){
-        f.value="";
-        showWarning();
-    }
+const months=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+
+let day=match[1].padStart(2,'0');
+let month=months[parseInt(match[2],10)-1];
+let year=match[3].slice(-2);
+
+document.getElementById("date").value=`${day}${month}${year}`;
+}
+
+function validateFlight(){
+let f=document.getElementById("flight");
+let val=f.value.trim().toUpperCase();
+
+if(val!=="" && !val.startsWith("DY") && !val.startsWith("D8")){
+f.value="";
+showWarning();
+}
 }
 
 function showWarning(){
-    let w=document.getElementById("flightWarning");
-    w.style.display="block";
+let w=document.getElementById("flightWarning");
+w.style.display="block";
 
-    setTimeout(()=>{
-        w.style.display="none";
-    },7000);
+setTimeout(()=>{
+w.style.display="none";
+},7000);
 }
 
 function closeWarning(){
-    document.getElementById("flightWarning").style.display="none";
+document.getElementById("flightWarning").style.display="none";
 }
 
-/* ORIGINAL SCRIPT CONTINUES */
-
 function checkFlightButtons() {
-    let flight = document.getElementById("flight").value.trim();
-    let date = document.getElementById("date").value.trim();
-    document.getElementById("openFlightBox").style.display =
-        (flight !== "" && date !== "") ? "block" : "none";
+let flight = document.getElementById("flight").value.trim();
+let date = document.getElementById("date").value.trim();
+document.getElementById("openFlightBox").style.display =
+(flight !== "" && date !== "") ? "block" : "none";
 }
 
 function convertDateForSystems() {
-    let input = document.getElementById("date").value.trim().toUpperCase();
-    let match = input.match(/^(\d{1,2})([A-Z]{3})(\d{2})$/);
-    if (!match) return null;
+let input = document.getElementById("date").value.trim().toUpperCase();
+let match = input.match(/^(\d{1,2})([A-Z]{3})(\d{2})$/);
+if (!match) return null;
 
-    const monthMap = {
-        JAN:"01", FEB:"02", MAR:"03", APR:"04", MAY:"05", JUN:"06",
-        JUL:"07", AUG:"08", SEP:"09", OCT:"10", NOV:"11", DEC:"12"
-    };
+const monthMap = {
+JAN:"01", FEB:"02", MAR:"03", APR:"04", MAY:"05", JUN:"06",
+JUL:"07", AUG:"08", SEP:"09", OCT:"10", NOV:"11", DEC:"12"
+};
 
-    let day = match[1].padStart(2,'0');
-    let month = monthMap[match[2]];
-    let year = "20" + match[3];
+let day = match[1].padStart(2,'0');
+let month = monthMap[match[2]];
+let year = "20" + match[3];
 
-    if (!month) return null;
+if (!month) return null;
 
-    return {
-        tidy: `${day}/${month}/${year}`,
-        bono: `${day}-${month}-${year}`
-    };
+return {
+tidy: `${day}/${month}/${year}`,
+bono: `${day}-${month}-${year}`
+};
 }
 
 function openTidy() {
-    let flight = document.getElementById("flight").value.trim().toUpperCase();
-    let dateObj = convertDateForSystems();
-    if (!dateObj) return;
+let flight = document.getElementById("flight").value.trim().toUpperCase();
+let dateObj = convertDateForSystems();
+if (!dateObj) return;
 
-    window.open(
-        `https://tidy.nas.dev/View/CDM/CDMFlightDetails.aspx?flightid=${flight}&flightdate=${dateObj.tidy}`,
-        "_blank"
-    );
+window.open(
+`https://tidy.nas.dev/View/CDM/CDMFlightDetails.aspx?flightid=${flight}&flightdate=${dateObj.tidy}`,
+"_blank"
+);
 }
 
 function openBono() {
-    let flight = document.getElementById("flight").value.trim().toUpperCase();
-    let dateObj = convertDateForSystems();
-    if (!dateObj) return;
+let flight = document.getElementById("flight").value.trim().toUpperCase();
+let dateObj = convertDateForSystems();
+if (!dateObj) return;
 
-    window.open(
-        `https://bono.nas.dev/nas/actions/flightreport/flightreport.action?searchBy=flightAndDate&flight=${flight}&flightDate=${dateObj.bono}&includeDeleted=false&limit=300&offset=0`,
-        "_blank"
-    );
+window.open(
+`https://bono.nas.dev/nas/actions/flightreport/flightreport.action?searchBy=flightAndDate&flight=${flight}&flightDate=${dateObj.bono}&includeDeleted=false&limit=300&offset=0`,
+"_blank"
+);
 }
 
-/* REMAINDER OF YOUR SCRIPT UNCHANGED */
-
 function updateReasonLabel() {
-    let irrValue = document.getElementById("irr").value;
-    let label = document.getElementById("reason-label");
+let irrValue = document.getElementById("irr").value;
+let label = document.getElementById("reason-label");
 
-    if (irrValue === "Delayed") {
-        label.innerText = "Reason for delay:";
-    } else if (irrValue === "Diversion") {
-        label.innerText = "Reason for diversion:";
-    } else {
-        label.innerText = "Reason for cancellation:";
-    }
+if (irrValue === "Delayed") {
+label.innerText = "Reason for delay:";
+} else if (irrValue === "Diversion") {
+label.innerText = "Reason for diversion:";
+} else {
+label.innerText = "Reason for cancellation:";
+}
 }
 
 document.querySelectorAll("input, select").forEach((el, index, arr) => {
-    el.addEventListener("keydown", function(e) {
-        if (e.key === "Enter") {
-            e.preventDefault();
-            let next = arr[index + 1];
-            if (next) next.focus();
-        }
-    });
+el.addEventListener("keydown", function(e) {
+if (e.key === "Enter") {
+e.preventDefault();
+let next = arr[index + 1];
+if (next) next.focus();
+}
+});
 });
 
 function updateClock() {
-    let now = new Date();
-    let hours = String(now.getHours()).padStart(2,'0');
-    let minutes = String(now.getMinutes()).padStart(2,'0');
-    let seconds = String(now.getSeconds()).padStart(2,'0');
-    let day = String(now.getDate()).padStart(2,'0');
-    let month = now.toLocaleString("en-US", { month: "short" }).toUpperCase();
-    let year = now.getFullYear().toString().slice(-2);
+let now = new Date();
+let hours = String(now.getHours()).padStart(2,'0');
+let minutes = String(now.getMinutes()).padStart(2,'0');
+let seconds = String(now.getSeconds()).padStart(2,'0');
+let day = String(now.getDate()).padStart(2,'0');
+let month = now.toLocaleString("en-US", { month: "short" }).toUpperCase();
+let year = now.getFullYear().toString().slice(-2);
 
-    document.getElementById("clock").innerText =
-        `${hours}:${minutes}:${seconds} / ${day}${month}${year}`;
+document.getElementById("clock").innerText =
+`${hours}:${minutes}:${seconds} / ${day}${month}${year}`;
 }
 
 setInterval(updateClock, 1000);
 updateClock();
 
 function setToday() {
-    let today = new Date();
-    let day = String(today.getDate()).padStart(2, '0');
-    let month = today.toLocaleString("en-US", { month: "short" }).toUpperCase();
-    let year = today.getFullYear().toString().slice(-2);
-    document.getElementById("date").value = `${day}${month}${year}`;
-    checkFlightButtons();
+let today = new Date();
+let day = String(today.getDate()).padStart(2, '0');
+let month = today.toLocaleString("en-US", { month: "short" }).toUpperCase();
+let year = today.getFullYear().toString().slice(-2);
+document.getElementById("date").value = `${day}${month}${year}`;
+checkFlightButtons();
 }
 
 function formatDate(input) {
-    let match = input.trim().match(/^(\d{1,2})([a-zA-Z]{3})(\d{2})$/);
-    if (!match) return input.toUpperCase();
-    let day = match[1].padStart(2, '0');
-    let month = match[2].toUpperCase();
-    let year = match[3];
-    return `${day}${month}${year}`;
+let match = input.trim().match(/^(\d{1,2})([a-zA-Z]{3})(\d{2})$/);
+if (!match) return input.toUpperCase();
+let day = match[1].padStart(2, '0');
+let month = match[2].toUpperCase();
+let year = match[3];
+return `${day}${month}${year}`;
 }
 
 function showModal(message) {
-    document.getElementById("modal-message").innerText = message;
-    document.getElementById("modal").style.display = "block";
+document.getElementById("modal-message").innerText = message;
+document.getElementById("modal").style.display = "block";
 }
 
 function closeModal() {
-    document.getElementById("modal").style.display = "none";
+document.getElementById("modal").style.display = "none";
 }
 
 function validateSelects() {
-    let selects = document.querySelectorAll("select");
-    for (let s of selects) {
-        if (s.value === "Select") {
-            showModal("All dropdown fields must be selected before generating the report.");
-            return false;
-        }
-    }
-    return true;
+let selects = document.querySelectorAll("select");
+for (let s of selects) {
+if (s.value === "Select") {
+showModal("All dropdown fields must be selected before generating the report.");
+return false;
+}
+}
+return true;
 }
 
 function generate() {
 
-    let flightValue = flight.value.trim();
-    let paxValue = pax.value.trim();
+let flightValue = flight.value.trim();
+let paxValue = pax.value.trim();
 
-    if (flightValue === "" || paxValue === "" || Number(paxValue) === 0) {
-        showModal("Missing flight details");
-        return;
-    }
+if (flightValue === "" || paxValue === "" || Number(paxValue) === 0) {
+showModal("Missing flight details");
+return;
+}
 
-    if (!validateSelects()) return;
+if (!validateSelects()) return;
 
-    let formattedDate = formatDate(date.value);
+let formattedDate = formatDate(date.value);
 
-    let irrValue = irr.value;
-    let reasonValue = reason.value;
-    let remarkValue = remark.value.trim();
+let irrValue = irr.value;
+let reasonValue = reason.value;
+let remarkValue = remark.value.trim();
 
-    let code = "";
-    if (irrValue === "Cancelled") code = "CNL";
-    if (irrValue === "Delayed") code = "DLY";
-    if (irrValue === "Diversion") code = "DIV";
+let code = "";
+if (irrValue === "Cancelled") code = "CNL";
+if (irrValue === "Delayed") code = "DLY";
+if (irrValue === "Diversion") code = "DIV";
 
-    if ((reasonValue === "Operational" || reasonValue === "Other") && remarkValue === "") {
-        showModal("Remark is mandatory under set conditions.");
-        return;
-    }
+if ((reasonValue === "Operational" || reasonValue === "Other") && remarkValue === "") {
+showModal("Remark is mandatory under set conditions.");
+return;
+}
 
-    if (remarkValue !== "") {
-        remarkValue = remarkValue.charAt(0).toUpperCase() + remarkValue.slice(1);
-        remarkValue = remarkValue.replace(/\bdy/gi, "DY");
-        remarkValue = remarkValue.replace(/\bd8/gi, "D8");
-    }
+if (remarkValue !== "") {
 
-    let header = `${flightValue.toUpperCase()} ${formattedDate} ${code}`;
+remarkValue = remarkValue.charAt(0).toUpperCase() + remarkValue.slice(1);
+remarkValue = remarkValue.replace(/\bdy/gi, "DY");
+remarkValue = remarkValue.replace(/\bd8/gi, "D8");
 
-    let text =
+/* NEW DATE NORMALIZATION IN REMARK */
+remarkValue = remarkValue.replace(/\b(\d{1,2})([a-zA-Z]{3})(\d{2})?\b/g, function(match, d, m){
+let day = d.padStart(2,"0");
+let month = m.toUpperCase();
+return `${day}${month}`;
+});
+
+}
+
+let header = `${flightValue.toUpperCase()} ${formattedDate} ${code}`;
+
+let text =
 `${header}
 Reason : ${reasonValue}
 Pax Figures : ${paxValue}
@@ -527,29 +526,29 @@ Rebooking Solution : ${solution.value}
 Spare AC : ${spare.value}
 Wetlease : ${wetlease.value}`;
 
-    if (remarkValue !== "") {
-        text += `\nRemark: ${remarkValue}`;
-    }
+if (remarkValue !== "") {
+text += `\nRemark: ${remarkValue}`;
+}
 
-    document.getElementById("output").innerText = text;
-    document.getElementById("ready").innerText = "Report ready";
+document.getElementById("output").innerText = text;
+document.getElementById("ready").innerText = "Report ready";
 }
 
 function copyText() {
-    let outputText = document.getElementById("output").innerText.trim();
-    if (outputText === "") {
-        showModal("Nothing to copy. Check input fields and dropdown menus.");
-        return;
-    }
-    navigator.clipboard.writeText(outputText);
+let outputText = document.getElementById("output").innerText.trim();
+if (outputText === "") {
+showModal("Nothing to copy. Check input fields and dropdown menus.");
+return;
+}
+navigator.clipboard.writeText(outputText);
 }
 
 function resetForm() {
-    document.querySelectorAll("input").forEach(i => i.value = "");
-    document.querySelectorAll("select").forEach(s => s.selectedIndex = 0);
-    document.getElementById("output").innerText = "";
-    document.getElementById("ready").innerText = "";
-    document.getElementById("openFlightBox").style.display = "none";
+document.querySelectorAll("input").forEach(i => i.value = "");
+document.querySelectorAll("select").forEach(s => s.selectedIndex = 0);
+document.getElementById("output").innerText = "";
+document.getElementById("ready").innerText = "";
+document.getElementById("openFlightBox").style.display = "none";
 }
 
 </script>
