@@ -32,6 +32,9 @@ body {
     text-align: center;
 }
 
+/* ADDED: ensures text boxes stay hidden until needed */
+.hidden { display:none; }
+
 .warning-banner{
     display:none;
     margin-top:8px;
@@ -167,7 +170,7 @@ Unknown flightnumber format (ensure DY or D8)
 
 <div class="header">
 <h1>IRR Event Logger</h1>
-<div class="rev">Rev 2.9</div>
+<div class="rev">Rev 3.0</div>
 </div>
 
 <div>
@@ -241,22 +244,28 @@ Rebooking Solution:
 <br><br>
 
 Spare AC:
-<select id="spare" class="medium">
+<select id="spare" class="medium" onchange="toggleSpareBox()">
 <option>Select</option>
 <option>Used</option>
 <option>Not available</option>
-<option>Not applicable. Would cause longer final delay.</option>
+<option>Would cause longer final delay.</option>
+<option>Not applicable.</option>
 </select>
+
+<input id="spareText" class="medium hidden" placeholder="Specify reason">
 
 &nbsp;&nbsp;
 
 Wetlease:
-<select id="wetlease" class="medium">
+<select id="wetlease" class="medium" onchange="toggleWetleaseBox()">
 <option>Select</option>
 <option>Wetlease arranged</option>
 <option>Not an option, would cause longer delay</option>
 <option>Not an option due to availability</option>
+<option>Not applicable.</option>
 </select>
+
+<input id="wetleaseText" class="medium hidden" placeholder="Specify reason">
 
 <br><br>
 
@@ -294,6 +303,18 @@ Remark (Optional Freetext):
 </div>
 
 <script>
+
+/* NEW toggle logic */
+
+function toggleSpareBox(){
+let spare=document.getElementById("spare").value;
+document.getElementById("spareText").classList.toggle("hidden",spare!=="Not applicable.");
+}
+
+function toggleWetleaseBox(){
+let wet=document.getElementById("wetlease").value;
+document.getElementById("wetleaseText").classList.toggle("hidden",wet!=="Not applicable.");
+}
 
 function autoFormatDate() {
 
@@ -486,6 +507,19 @@ if (!validateSelects()) return;
 
 let formattedDate = formatDate(date.value);
 
+let spareValue = spare.value;
+let wetleaseValue = wetlease.value;
+
+if(spareValue==="Not applicable." && spareText.value.trim()===""){
+showModal("Please specify reason for Spare AC not applicable.");
+return;
+}
+
+if(wetleaseValue==="Not applicable." && wetleaseText.value.trim()===""){
+showModal("Please specify reason for Wetlease not applicable.");
+return;
+}
+
 let irrValue = irr.value;
 let reasonValue = reason.value;
 let remarkValue = remark.value.trim();
@@ -523,8 +557,8 @@ Reason : ${reasonValue}
 Pax Figures : ${paxValue}
 Rebooking : ${rebooking.value}
 Rebooking Solution : ${solution.value}
-Spare AC : ${spare.value}
-Wetlease : ${wetlease.value}`;
+Spare AC : ${spareValue}${spareValue==="Not applicable." ? " / "+spareText.value : ""}
+Wetlease : ${wetleaseValue}${wetleaseValue==="Not applicable." ? " / "+wetleaseText.value : ""}`;
 
 if (remarkValue !== "") {
 text += `\nRemark: ${remarkValue}`;
