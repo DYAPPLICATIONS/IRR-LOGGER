@@ -252,8 +252,8 @@ Spare AC:
 <option>Select</option>
 <option>Used</option>
 <option>Not available</option>
-<option>Would cause longer final delay.</option>
-<option>Not applicable.</option>
+<option>Would cause longer final delay</option>
+<option>Not applicable</option>
 </select>
 
 <input id="spareText" class="medium hidden" placeholder="Specify reason">
@@ -266,7 +266,7 @@ Wetlease:
 <option>Wetlease arranged</option>
 <option>Not an option. Would cause longer delay.</option>
 <option>Not an option due to availability</option>
-<option>Not applicable.</option>
+<option>Not applicable</option>
 </select>
 
 <input id="wetleaseText" class="medium hidden" placeholder="Specify reason">
@@ -312,12 +312,12 @@ Remark (Optional Freetext):
 
 function toggleSpareBox(){
 let spare=document.getElementById("spare").value;
-document.getElementById("spareText").classList.toggle("hidden",spare!=="Not applicable.");
+document.getElementById("spareText").classList.toggle("hidden",spare!=="Not applicable");
 }
 
 function toggleWetleaseBox(){
 let wet=document.getElementById("wetlease").value;
-document.getElementById("wetleaseText").classList.toggle("hidden",wet!=="Not applicable.");
+document.getElementById("wetleaseText").classList.toggle("hidden",wet!=="Not applicable");
 }
 
 function autoFormatDate() {
