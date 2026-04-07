@@ -532,7 +532,7 @@ if (irrValue === "Cancelled") code = "CNL";
 if (irrValue === "Delayed") code = "DLY";
 if (irrValue === "Diversion") code = "DIV";
 
-if ((reasonValue === "Operational" || reasonValue === "Other") && remarkValue === "") {
+if ((reasonValue === "Operational" || reasonValue === "Other"|| reasonValue === "Strike"|| reasonValue === "Crew"))) && remarkValue === "") {
 showModal("Remark is mandatory under set conditions.");
 return;
 }
