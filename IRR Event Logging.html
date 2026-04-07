@@ -514,12 +514,12 @@ let formattedDate = formatDate(date.value);
 let spareValue = spare.value;
 let wetleaseValue = wetlease.value;
 
-if(spareValue==="Not applicable." && spareText.value.trim()===""){
+if(spareValue==="Not applicable" && spareText.value.trim()===""){
 showModal("Please specify reason for Spare AC not applicable.");
 return;
 }
 
-if(wetleaseValue==="Not applicable." && wetleaseText.value.trim()===""){
+if(wetleaseValue==="Not applicable" && wetleaseText.value.trim()===""){
 showModal("Please specify reason for Wetlease not applicable.");
 return;
 }
@@ -561,8 +561,8 @@ Reason : ${reasonValue}
 Pax Figures : ${paxValue}
 Rebooking : ${rebooking.value}
 Rebooking Solution : ${solution.value}
-Spare AC : ${spareValue}${spareValue==="Not applicable." ? " / "+spareText.value : ""}
-Wetlease : ${wetleaseValue}${wetleaseValue==="Not applicable." ? " / "+wetleaseText.value : ""}`;
+Spare AC : ${spareValue}${spareValue==="Not applicable" ? " / "+spareText.value : ""}
+Wetlease : ${wetleaseValue}${wetleaseValue==="Not applicable" ? " / "+wetleaseText.value : ""}`;
 
 if (remarkValue !== "") {
 text += `\nRemark: ${remarkValue}`;
