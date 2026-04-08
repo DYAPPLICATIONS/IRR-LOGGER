@@ -5,145 +5,142 @@
 <title>IRR Event Logger</title>
 
 <style>
-body {
-    font-family: Calibri, Arial, sans-serif;
-    background: radial-gradient(#cfcfcf 1px, transparent 1px);
-    background-size: 6px 6px;
-    padding: 30px;
+body{
+font-family:Calibri,Arial,sans-serif;
+background:radial-gradient(#cfcfcf 1px,transparent 1px);
+background-size:6px 6px;
+padding:30px;
 }
 
-.wrapper { width: 1100px; margin: auto; position: relative; }
+.wrapper{width:1100px;margin:auto;position:relative;}
 
-.logo {
-    position: absolute;
-    top: 0;
-    right: 0;
-    text-align: center;
-    width: 220px;
+.logo{
+position:absolute;
+top:0;
+right:0;
+text-align:center;
+width:220px;
 }
 
-.logo img { width: 220px; }
+.logo img{width:220px;}
 
-.clock {
-    margin-top: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    color: darkblue;
-    text-align: center;
+.clock{
+margin-top:10px;
+font-size:16px;
+font-weight:bold;
+color:darkblue;
+text-align:center;
 }
 
-/* ADDED: ensures text boxes stay hidden until needed */
-.hidden { display:none; }
+.hidden{display:none;}
 
 .warning-banner{
-    display:none;
-    margin-top:8px;
-    background:rgba(200,0,0,0.75);
-    color:white;
-    padding:8px;
-    font-size:13px;
-    border-radius:4px;
-    position:relative;
+display:none;
+margin-top:8px;
+background:rgba(200,0,0,0.75);
+color:white;
+padding:8px;
+font-size:13px;
+border-radius:4px;
+position:relative;
 }
 
 .warning-banner .close{
-    position:absolute;
-    right:8px;
-    top:3px;
-    cursor:pointer;
-    font-weight:bold;
+position:absolute;
+right:8px;
+top:3px;
+cursor:pointer;
+font-weight:bold;
 }
 
-.open-flight-box {
-    display: none;
-    margin-top: 10px;
-    text-align: center;
+.open-flight-box{
+display:none;
+margin-top:10px;
+text-align:center;
 }
 
-.header {
-    text-align: center;
-    margin-bottom: 40px;
+.header{
+text-align:center;
+margin-bottom:40px;
 }
 
-h1 { margin-bottom: 0; }
-.rev { font-style: italic; margin-bottom: 20px; }
+h1{margin-bottom:0;}
+.rev{font-style:italic;margin-bottom:20px;}
 
-.section-number {
-    background: yellow;
-    display: inline-block;
-    padding: 2px 8px;
-    font-weight: bold;
+.section-number{
+background:yellow;
+display:inline-block;
+padding:2px 8px;
+font-weight:bold;
 }
 
-.box {
-    background: #d9d9d9;
-    border: 2px solid black;
-    padding: 15px;
-    margin-top: 10px;
+.box{
+background:#d9d9d9;
+border:2px solid black;
+padding:15px;
+margin-top:10px;
 }
 
-input, select {
-    background: #ffc000;
-    border: 1px solid black;
-    padding: 3px;
-    font-family: Calibri;
+input,select{
+background:#ffc000;
+border:1px solid black;
+padding:3px;
+font-family:Calibri;
 }
 
-input.small { width: 100px; }
-input.medium { width: 160px; }
-input.long { width: 450px; }
-select.medium { width: 180px; }
-select.long { width: 520px; }
+input.small{width:100px;}
+input.medium{width:160px;}
+input.long{width:450px;}
+select.medium{width:180px;}
+select.long{width:520px;}
 
-button {
-    padding: 6px 14px;
-    font-weight: bold;
-    cursor: pointer;
-    border: 1px solid black;
-    transition: transform 0.05s ease;
+button{
+padding:6px 14px;
+font-weight:bold;
+cursor:pointer;
+border:1px solid black;
+transition:transform .05s ease;
 }
 
-button:active{
-    transform:scale(1.08);
+button:active{transform:scale(1.08);}
+
+.reset-btn{background:red;color:white;}
+.generate-btn{background:#92d050;}
+.copy-btn{background:#bdd7ee;}
+
+.green-text{
+color:green;
+font-style:italic;
+margin-left:15px;
 }
 
-.reset-btn { background: red; color: white; }
-.generate-btn { background: #92d050; }
-.copy-btn { background: #bdd7ee; }
-
-.green-text {
-    color: green;
-    font-style: italic;
-    margin-left: 15px;
+.output-box{
+background:#efefef;
+border:2px solid #1f7a3f;
+padding:10px;
+height:240px;
+width:750px;
+white-space:pre-wrap;
+font-family:"Courier New",monospace;
 }
 
-.output-box {
-    background: #efefef;
-    border: 2px solid #1f7a3f;
-    padding: 10px;
-    height: 240px;
-    width: 750px;
-    white-space: pre-wrap;
-    font-family: "Courier New", monospace;
+.modal-overlay{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.4);
 }
 
-.modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.4);
-}
-
-.modal-box {
-    background: white;
-    width: 350px;
-    padding: 20px;
-    margin: 15% auto;
-    text-align: center;
-    border: 2px solid black;
+.modal-box{
+background:white;
+width:350px;
+padding:20px;
+margin:15% auto;
+text-align:center;
+border:2px solid black;
 }
 </style>
 </head>
@@ -153,7 +150,7 @@ button:active{
 <div class="wrapper">
 
 <div class="logo">
-<img src="./safety-logo.png" alt="Safety Logo">
+<img src="./safety-logo.png">
 <div id="clock" class="clock"></div>
 
 <div id="flightWarning" class="warning-banner">
@@ -170,7 +167,7 @@ Unknown flightnumber format (ensure DY or D8)
 
 <div class="header">
 <h1>IRR Event Logger</h1>
-<div class="rev">Rev 3.2</div>
+<div class="rev">Rev 3.3</div>
 </div>
 
 <div>
@@ -178,17 +175,23 @@ Unknown flightnumber format (ensure DY or D8)
 <div class="box" style="width:500px;">
 <b>Regarding flight</b>
 <button class="reset-btn" style="float:right;" onclick="resetForm()">Reset</button>
+
 <br><br>
 
 Flightnumber:
-<input id="flight" class="medium" oninput="checkFlightButtons()" onblur="validateFlight()"><br><br>
+<input id="flight" class="medium" oninput="checkFlightButtons()" onblur="validateFlight()">
+
+<br><br>
 
 Date:
 <input id="date" class="medium" oninput="checkFlightButtons()" onblur="autoFormatDate()">
-<button onclick="setToday()">Set todays date</button><br><br>
+<button onclick="setToday()">Set todays date</button>
+
+<br><br>
 
 Pax Figures:
 <input id="pax" class="small">
+
 </div>
 </div>
 
@@ -197,10 +200,13 @@ Pax Figures:
 <div>
 <span class="section-number">2)</span>
 <div class="box" style="width:1000px;">
+
 <b>Specify Irregularity</b>
+
 <br><br>
 
 Irregularity:
+
 <select id="irr" class="medium" onchange="updateReasonLabel()">
 <option>Select</option>
 <option>Cancelled</option>
@@ -211,7 +217,8 @@ Irregularity:
 &nbsp;&nbsp;
 
 <span id="reason-label">Reason for cancellation:</span>
-<select id="reason" class="medium">
+
+<select id="reason" class="medium" onchange="toggleReasonBox()">
 <option>Select</option>
 <option>Technical</option>
 <option>Weather</option>
@@ -224,11 +231,13 @@ Irregularity:
 <option>Crew</option>
 <option>Other</option>
 </select>
-	
-&nbsp;&nbsp;
+
+<input id="reasonText" class="medium hidden" placeholder="Specify reason">
+
 <br><br>
-	
+
 Rebooking:
+
 <select id="rebooking" class="medium">
 <option>Select</option>
 <option>Yes</option>
@@ -236,17 +245,20 @@ Rebooking:
 </select>
 
 &nbsp; Rebooking Solution:
+
 <select id="solution" class="long">
-  <option>Select</option>
-  <option>First available option</option>
-  <option>Ground transport arranged</option>
-  <option>No alternative transport available (pax advised to arrange own transport and get refund)</option>
-  <option>Recovery flight arranged</option>
-  <option>Would have caused longer delay</option>
+<option>Select</option>
+<option>First available option</option>
+<option>Ground transport arranged</option>
+<option>No alternative transport available (pax advised to arrange own transport and get refund)</option>
+<option>Recovery flight arranged</option>
+<option>Would have caused longer delay</option>
 </select>
+
 <br><br>
 
 Spare AC:
+
 <select id="spare" class="medium" onchange="toggleSpareBox()">
 <option>Select</option>
 <option>Used</option>
@@ -260,6 +272,7 @@ Spare AC:
 &nbsp;&nbsp;
 
 Wetlease:
+
 <select id="wetlease" class="medium" onchange="toggleWetleaseBox()">
 <option>Select</option>
 <option>Wetlease arranged</option>
@@ -272,14 +285,17 @@ Wetlease:
 
 <br><br>
 
-Remark (Freetext):
+Remark (Freetext)
+
 <br>
+
 <input id="remark" class="long">
 
 <br><br>
 
 <button class="generate-btn" onclick="generate()">Generate</button>
 <span id="ready" class="green-text"></span>
+
 </div>
 </div>
 
@@ -287,11 +303,17 @@ Remark (Freetext):
 
 <div>
 <span class="section-number">3)</span>
+
 <div class="box" style="width:800px;">
+
 <b>Copy to 15below</b>
+
 <br><br>
+
 <button class="copy-btn" onclick="copyText()">Copy</button>
+
 <div id="output" class="output-box"></div>
+
 </div>
 </div>
 
@@ -307,285 +329,295 @@ Remark (Freetext):
 
 <script>
 
-/* NEW toggle logic */
+function updateClock(){
+
+let now=new Date();
+
+let hours=String(now.getHours()).padStart(2,'0');
+let minutes=String(now.getMinutes()).padStart(2,'0');
+let seconds=String(now.getSeconds()).padStart(2,'0');
+
+let day=String(now.getDate()).padStart(2,'0');
+
+let month=now.toLocaleString("en-US",{month:"short"}).toUpperCase();
+
+let year=now.getFullYear().toString().slice(-2);
+
+document.getElementById("clock").innerText=
+`${hours}:${minutes}:${seconds} / ${day}${month}${year}`;
+}
+
+setInterval(updateClock,1000);
+updateClock();
+
+function toggleReasonBox(){
+
+let val=reason.value;
+
+if(val==="Strike"||val==="Crew"||val==="Operational"||val==="Other"){
+reasonText.classList.remove("hidden");
+}
+else{
+reasonText.classList.add("hidden");
+reasonText.value="";
+}
+
+}
 
 function toggleSpareBox(){
-let spare=document.getElementById("spare").value;
-document.getElementById("spareText").classList.toggle("hidden",spare!=="Not applicable");
+
+spareText.classList.toggle("hidden",spare.value!=="Not applicable");
+
 }
 
 function toggleWetleaseBox(){
-let wet=document.getElementById("wetlease").value;
-document.getElementById("wetleaseText").classList.toggle("hidden",wet!=="Not applicable");
-}
 
-function autoFormatDate() {
+wetleaseText.classList.toggle("hidden",wetlease.value!=="Not applicable");
 
-let input=document.getElementById("date").value.trim();
-
-let shortMatch=input.match(/^(\d{1,2})([a-zA-Z]{3})$/);
-
-if(shortMatch){
-let day=shortMatch[1].padStart(2,'0');
-let month=shortMatch[2].toUpperCase();
-let year=new Date().getFullYear().toString().slice(-2);
-document.getElementById("date").value=`${day}${month}${year}`;
-return;
-}
-
-let match=input.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
-if(!match)return;
-
-const months=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
-
-let day=match[1].padStart(2,'0');
-let month=months[parseInt(match[2],10)-1];
-let year=match[3].slice(-2);
-
-document.getElementById("date").value=`${day}${month}${year}`;
 }
 
 function validateFlight(){
-let f=document.getElementById("flight");
-let val=f.value.trim().toUpperCase();
+
+let val=flight.value.trim().toUpperCase();
 
 if(val!=="" && !val.startsWith("DY") && !val.startsWith("D8")){
-f.value="";
+flight.value="";
 showWarning();
 }
+
 }
 
 function showWarning(){
+
 let w=document.getElementById("flightWarning");
+
 w.style.display="block";
 
 setTimeout(()=>{
 w.style.display="none";
 },7000);
+
 }
 
 function closeWarning(){
-document.getElementById("flightWarning").style.display="none";
+
+flightWarning.style.display="none";
+
 }
 
-function checkFlightButtons() {
-let flight = document.getElementById("flight").value.trim();
-let date = document.getElementById("date").value.trim();
-document.getElementById("openFlightBox").style.display =
-(flight !== "" && date !== "") ? "block" : "none";
+function checkFlightButtons(){
+
+let f=flight.value.trim();
+let d=date.value.trim();
+
+openFlightBox.style.display=(f!=="" && d!=="")?"block":"none";
+
 }
 
-function convertDateForSystems() {
-let input = document.getElementById("date").value.trim().toUpperCase();
-let match = input.match(/^(\d{1,2})([A-Z]{3})(\d{2})$/);
-if (!match) return null;
+function convertDateForSystems(){
 
-const monthMap = {
-JAN:"01", FEB:"02", MAR:"03", APR:"04", MAY:"05", JUN:"06",
-JUL:"07", AUG:"08", SEP:"09", OCT:"10", NOV:"11", DEC:"12"
+let input=date.value.trim().toUpperCase();
+
+let match=input.match(/^(\d{1,2})([A-Z]{3})(\d{2})$/);
+
+if(!match)return null;
+
+const monthMap={
+JAN:"01",FEB:"02",MAR:"03",APR:"04",
+MAY:"05",JUN:"06",JUL:"07",AUG:"08",
+SEP:"09",OCT:"10",NOV:"11",DEC:"12"
 };
 
-let day = match[1].padStart(2,'0');
-let month = monthMap[match[2]];
-let year = "20" + match[3];
+let day=match[1].padStart(2,'0');
+let month=monthMap[match[2]];
+let year="20"+match[3];
 
-if (!month) return null;
-
-return {
-tidy: `${day}/${month}/${year}`,
-bono: `${day}-${month}-${year}`
+return{
+tidy:`${day}/${month}/${year}`,
+bono:`${day}-${month}-${year}`
 };
+
 }
 
-function openTidy() {
-let flight = document.getElementById("flight").value.trim().toUpperCase();
-let dateObj = convertDateForSystems();
-if (!dateObj) return;
+function openTidy(){
+
+let f=flight.value.trim().toUpperCase();
+
+let d=convertDateForSystems();
+
+if(!d)return;
 
 window.open(
-`https://tidy.nas.dev/View/CDM/CDMFlightDetails.aspx?flightid=${flight}&flightdate=${dateObj.tidy}`,
+`https://tidy.nas.dev/View/CDM/CDMFlightDetails.aspx?flightid=${f}&flightdate=${d.tidy}`,
 "_blank"
 );
+
 }
 
-function openBono() {
-let flight = document.getElementById("flight").value.trim().toUpperCase();
-let dateObj = convertDateForSystems();
-if (!dateObj) return;
+function openBono(){
+
+let f=flight.value.trim().toUpperCase();
+
+let d=convertDateForSystems();
+
+if(!d)return;
 
 window.open(
-`https://bono.nas.dev/nas/actions/flightreport/flightreport.action?searchBy=flightAndDate&flight=${flight}&flightDate=${dateObj.bono}&includeDeleted=false&limit=300&offset=0`,
+`https://bono.nas.dev/nas/actions/flightreport/flightreport.action?searchBy=flightAndDate&flight=${f}&flightDate=${d.bono}&includeDeleted=false&limit=300&offset=0`,
 "_blank"
 );
+
 }
 
-function updateReasonLabel() {
-let irrValue = document.getElementById("irr").value;
-let label = document.getElementById("reason-label");
+function setToday(){
 
-if (irrValue === "Delayed") {
-label.innerText = "Reason for delay:";
-} else if (irrValue === "Diversion") {
-label.innerText = "Reason for diversion:";
-} else {
-label.innerText = "Reason for cancellation:";
-}
-}
+let today=new Date();
 
-document.querySelectorAll("input, select").forEach((el, index, arr) => {
-el.addEventListener("keydown", function(e) {
-if (e.key === "Enter") {
-e.preventDefault();
-let next = arr[index + 1];
-if (next) next.focus();
-}
-});
-});
+let day=String(today.getDate()).padStart(2,'0');
 
-function updateClock() {
-let now = new Date();
-let hours = String(now.getHours()).padStart(2,'0');
-let minutes = String(now.getMinutes()).padStart(2,'0');
-let seconds = String(now.getSeconds()).padStart(2,'0');
-let day = String(now.getDate()).padStart(2,'0');
-let month = now.toLocaleString("en-US", { month: "short" }).toUpperCase();
-let year = now.getFullYear().toString().slice(-2);
+let month=today.toLocaleString("en-US",{month:"short"}).toUpperCase();
 
-document.getElementById("clock").innerText =
-`${hours}:${minutes}:${seconds} / ${day}${month}${year}`;
-}
+let year=today.getFullYear().toString().slice(-2);
 
-setInterval(updateClock, 1000);
-updateClock();
+date.value=`${day}${month}${year}`;
 
-function setToday() {
-let today = new Date();
-let day = String(today.getDate()).padStart(2, '0');
-let month = today.toLocaleString("en-US", { month: "short" }).toUpperCase();
-let year = today.getFullYear().toString().slice(-2);
-document.getElementById("date").value = `${day}${month}${year}`;
 checkFlightButtons();
+
 }
 
-function formatDate(input) {
-let match = input.trim().match(/^(\d{1,2})([a-zA-Z]{3})(\d{2})$/);
-if (!match) return input.toUpperCase();
-let day = match[1].padStart(2, '0');
-let month = match[2].toUpperCase();
-let year = match[3];
-return `${day}${month}${year}`;
+function autoFormatDate(){
+
+let input=date.value.trim();
+
+let shortMatch=input.match(/^(\d{1,2})([a-zA-Z]{3})$/);
+
+if(shortMatch){
+
+let day=shortMatch[1].padStart(2,'0');
+
+let month=shortMatch[2].toUpperCase();
+
+let year=new Date().getFullYear().toString().slice(-2);
+
+date.value=`${day}${month}${year}`;
+
 }
 
-function showModal(message) {
-document.getElementById("modal-message").innerText = message;
-document.getElementById("modal").style.display = "block";
 }
 
-function closeModal() {
-document.getElementById("modal").style.display = "none";
+function showModal(message){
+
+modalMessage.innerText=message;
+
+modal.style.display="block";
+
 }
 
-function validateSelects() {
-let selects = document.querySelectorAll("select");
-for (let s of selects) {
-if (s.value === "Select") {
+function closeModal(){
+
+modal.style.display="none";
+
+}
+
+function validateSelects(){
+
+let selects=document.querySelectorAll("select");
+
+for(let s of selects){
+
+if(s.value==="Select"){
+
 showModal("All dropdown fields must be selected before generating the report.");
+
 return false;
+
 }
+
 }
+
 return true;
+
 }
 
-function generate() {
+function generate(){
 
-let flightValue = flight.value.trim();
-let paxValue = pax.value.trim();
+let flightValue=flight.value.trim();
+let paxValue=pax.value.trim();
 
-if (flightValue === "" || paxValue === "" || Number(paxValue) === 0) {
+if(flightValue===""||paxValue===""||Number(paxValue)===0){
 showModal("Missing flight details");
 return;
 }
 
-if (!validateSelects()) return;
+if(!validateSelects())return;
 
-let formattedDate = formatDate(date.value);
+let reasonValue=reason.value;
+let reasonExtra=reasonText.value.trim();
 
-let spareValue = spare.value;
-let wetleaseValue = wetlease.value;
-
-if(spareValue==="Not applicable" && spareText.value.trim()===""){
-showModal("Please specify reason for Spare AC not applicable.");
+if((reasonValue==="Strike"||reasonValue==="Crew"||reasonValue==="Operational"||reasonValue==="Other") && reasonExtra===""){
+showModal("Please specify reason.");
 return;
 }
 
-if(wetleaseValue==="Not applicable" && wetleaseText.value.trim()===""){
-showModal("Please specify reason for Wetlease not applicable.");
-return;
+let reasonOutput=reasonValue;
+
+if(reasonExtra!==""){
+reasonOutput+=` / ${reasonExtra}`;
 }
 
-let irrValue = irr.value;
-let reasonValue = reason.value;
-let remarkValue = remark.value.trim();
+let irrValue=irr.value;
 
-let code = "";
-if (irrValue === "Cancelled") code = "CNL";
-if (irrValue === "Delayed") code = "DLY";
-if (irrValue === "Diversion") code = "DIV";
+let code="";
 
-if ((reasonValue === "Operational" || reasonValue === "Other") && remarkValue === "") {
-showModal("Remark is mandatory under set conditions.");
-return;
-}
+if(irrValue==="Cancelled")code="CNL";
+if(irrValue==="Delayed")code="DLY";
+if(irrValue==="Diversion")code="DIV";
 
-if (remarkValue !== "") {
+let header=`${flightValue.toUpperCase()} ${date.value.toUpperCase()} ${code}`;
 
-remarkValue = remarkValue.charAt(0).toUpperCase() + remarkValue.slice(1);
-remarkValue = remarkValue.replace(/\bdy/gi, "DY");
-remarkValue = remarkValue.replace(/\bd8/gi, "D8");
-
-/* NEW DATE NORMALIZATION IN REMARK */
-remarkValue = remarkValue.replace(/\b(\d{1,2})([a-zA-Z]{3})(\d{2})?\b/g, function(match, d, m){
-let day = d.padStart(2,"0");
-let month = m.toUpperCase();
-return `${day}${month}`;
-});
-
-}
-
-let header = `${flightValue.toUpperCase()} ${formattedDate} ${code}`;
-
-let text =
+let text=
 `${header}
-Reason : ${reasonValue}
+Reason : ${reasonOutput}
 Pax Figures : ${paxValue}
 Rebooking : ${rebooking.value}
 Rebooking Solution : ${solution.value}
-Spare AC : ${spareValue}${spareValue==="Not applicable" ? " / "+spareText.value : ""}
-Wetlease : ${wetleaseValue}${wetleaseValue==="Not applicable" ? " / "+wetleaseText.value : ""}`;
+Spare AC : ${spare.value}${spare.value==="Not applicable"?" / "+spareText.value:""}
+Wetlease : ${wetlease.value}${wetlease.value==="Not applicable"?" / "+wetleaseText.value:""}`;
 
-if (remarkValue !== "") {
-text += `\nRemark: ${remarkValue}`;
+if(remark.value.trim()!==""){
+text+=`\nRemark: ${remark.value}`;
 }
 
-document.getElementById("output").innerText = text;
-document.getElementById("ready").innerText = "Report ready";
+output.innerText=text;
+ready.innerText="Report ready";
+
 }
 
-function copyText() {
-let outputText = document.getElementById("output").innerText.trim();
-if (outputText === "") {
-showModal("Nothing to copy. Check input fields and dropdown menus.");
+function copyText(){
+
+let txt=output.innerText.trim();
+
+if(txt===""){
+showModal("Nothing to copy.");
 return;
 }
-navigator.clipboard.writeText(outputText);
+
+navigator.clipboard.writeText(txt);
+
 }
 
-function resetForm() {
-document.querySelectorAll("input").forEach(i => i.value = "");
-document.querySelectorAll("select").forEach(s => s.selectedIndex = 0);
-document.getElementById("output").innerText = "";
-document.getElementById("ready").innerText = "";
-document.getElementById("openFlightBox").style.display = "none";
+function resetForm(){
+
+document.querySelectorAll("input").forEach(i=>i.value="");
+
+document.querySelectorAll("select").forEach(s=>s.selectedIndex=0);
+
+output.innerText="";
+ready.innerText="";
+openFlightBox.style.display="none";
+
+reasonText.classList.add("hidden");
+
 }
 
 </script>
