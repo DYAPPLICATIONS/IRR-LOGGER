@@ -206,7 +206,6 @@ Pax Figures:
 <br><br>
 
 Irregularity:
-
 <select id="irr" class="medium" onchange="updateReasonLabel()">
 <option>Select</option>
 <option>Cancelled</option>
@@ -237,7 +236,6 @@ Irregularity:
 <br><br>
 
 Rebooking:
-
 <select id="rebooking" class="medium">
 <option>Select</option>
 <option>Yes</option>
@@ -245,7 +243,6 @@ Rebooking:
 </select>
 
 &nbsp; Rebooking Solution:
-
 <select id="solution" class="long">
 <option>Select</option>
 <option>First available option</option>
@@ -258,7 +255,6 @@ Rebooking:
 <br><br>
 
 Spare AC:
-
 <select id="spare" class="medium" onchange="toggleSpareBox()">
 <option>Select</option>
 <option>Used</option>
@@ -272,7 +268,6 @@ Spare AC:
 &nbsp;&nbsp;
 
 Wetlease:
-
 <select id="wetlease" class="medium" onchange="toggleWetleaseBox()">
 <option>Select</option>
 <option>Wetlease arranged</option>
@@ -286,9 +281,7 @@ Wetlease:
 <br><br>
 
 Remark (Freetext)
-
 <br>
-
 <input id="remark" class="long">
 
 <br><br>
@@ -305,15 +298,10 @@ Remark (Freetext)
 <span class="section-number">3)</span>
 
 <div class="box" style="width:800px;">
-
 <b>Copy to 15below</b>
-
 <br><br>
-
 <button class="copy-btn" onclick="copyText()">Copy</button>
-
 <div id="output" class="output-box"></div>
-
 </div>
 </div>
 
@@ -330,88 +318,56 @@ Remark (Freetext)
 <script>
 
 function updateClock(){
-
 let now=new Date();
-
 let hours=String(now.getHours()).padStart(2,'0');
 let minutes=String(now.getMinutes()).padStart(2,'0');
 let seconds=String(now.getSeconds()).padStart(2,'0');
-
 let day=String(now.getDate()).padStart(2,'0');
-
 let month=now.toLocaleString("en-US",{month:"short"}).toUpperCase();
-
 let year=now.getFullYear().toString().slice(-2);
 
-document.getElementById("clock").innerText=
-`${hours}:${minutes}:${seconds} / ${day}${month}${year}`;
+clock.innerText=`${hours}:${minutes}:${seconds} / ${day}${month}${year}`;
 }
-
 setInterval(updateClock,1000);
 updateClock();
 
 function toggleReasonBox(){
-
 let val=reason.value;
-
 if(val==="Strike"||val==="Crew"||val==="Operational"||val==="Other"){
 reasonText.classList.remove("hidden");
-}
-else{
+}else{
 reasonText.classList.add("hidden");
 reasonText.value="";
 }
-
 }
 
 function toggleSpareBox(){
-
 spareText.classList.toggle("hidden",spare.value!=="Not applicable");
-
 }
 
 function toggleWetleaseBox(){
-
 wetleaseText.classList.toggle("hidden",wetlease.value!=="Not applicable");
-
 }
 
 function validateFlight(){
-
 let val=flight.value.trim().toUpperCase();
-
-if(val!=="" && !val.startsWith("DY") && !val.startsWith("D8")){
+if(val!==""&&!val.startsWith("DY")&&!val.startsWith("D8")){
 flight.value="";
 showWarning();
 }
-
 }
 
 function showWarning(){
-
-let w=document.getElementById("flightWarning");
-
-w.style.display="block";
-
-setTimeout(()=>{
-w.style.display="none";
-},7000);
-
+flightWarning.style.display="block";
+setTimeout(()=>{flightWarning.style.display="none"},7000);
 }
 
 function closeWarning(){
-
 flightWarning.style.display="none";
-
 }
 
 function checkFlightButtons(){
-
-let f=flight.value.trim();
-let d=date.value.trim();
-
-openFlightBox.style.display=(f!=="" && d!=="")?"block":"none";
-
+openFlightBox.style.display=(flight.value.trim()!==""&&date.value.trim()!=="")?"block":"none";
 }
 
 function convertDateForSystems(){
@@ -422,11 +378,7 @@ let match=input.match(/^(\d{1,2})([A-Z]{3})(\d{2})$/);
 
 if(!match)return null;
 
-const monthMap={
-JAN:"01",FEB:"02",MAR:"03",APR:"04",
-MAY:"05",JUN:"06",JUL:"07",AUG:"08",
-SEP:"09",OCT:"10",NOV:"11",DEC:"12"
-};
+const monthMap={JAN:"01",FEB:"02",MAR:"03",APR:"04",MAY:"05",JUN:"06",JUL:"07",AUG:"08",SEP:"09",OCT:"10",NOV:"11",DEC:"12"};
 
 let day=match[1].padStart(2,'0');
 let month=monthMap[match[2]];
@@ -436,115 +388,76 @@ return{
 tidy:`${day}/${month}/${year}`,
 bono:`${day}-${month}-${year}`
 };
-
 }
 
 function openTidy(){
-
-let f=flight.value.trim().toUpperCase();
-
 let d=convertDateForSystems();
-
 if(!d)return;
-
-window.open(
-`https://tidy.nas.dev/View/CDM/CDMFlightDetails.aspx?flightid=${f}&flightdate=${d.tidy}`,
-"_blank"
-);
-
+window.open(`https://tidy.nas.dev/View/CDM/CDMFlightDetails.aspx?flightid=${flight.value.toUpperCase()}&flightdate=${d.tidy}`,"_blank");
 }
 
 function openBono(){
-
-let f=flight.value.trim().toUpperCase();
-
 let d=convertDateForSystems();
-
 if(!d)return;
-
-window.open(
-`https://bono.nas.dev/nas/actions/flightreport/flightreport.action?searchBy=flightAndDate&flight=${f}&flightDate=${d.bono}&includeDeleted=false&limit=300&offset=0`,
-"_blank"
-);
-
+window.open(`https://bono.nas.dev/nas/actions/flightreport/flightreport.action?searchBy=flightAndDate&flight=${flight.value.toUpperCase()}&flightDate=${d.bono}`,"_blank");
 }
 
 function setToday(){
-
 let today=new Date();
-
 let day=String(today.getDate()).padStart(2,'0');
-
 let month=today.toLocaleString("en-US",{month:"short"}).toUpperCase();
-
 let year=today.getFullYear().toString().slice(-2);
-
 date.value=`${day}${month}${year}`;
-
 checkFlightButtons();
-
 }
 
 function autoFormatDate(){
-
 let input=date.value.trim();
-
 let shortMatch=input.match(/^(\d{1,2})([a-zA-Z]{3})$/);
 
 if(shortMatch){
-
 let day=shortMatch[1].padStart(2,'0');
-
 let month=shortMatch[2].toUpperCase();
-
 let year=new Date().getFullYear().toString().slice(-2);
-
 date.value=`${day}${month}${year}`;
-
 }
-
 }
 
 function showModal(message){
-
 modalMessage.innerText=message;
-
 modal.style.display="block";
-
 }
 
 function closeModal(){
-
 modal.style.display="none";
-
 }
 
 function validateSelects(){
-
 let selects=document.querySelectorAll("select");
-
 for(let s of selects){
-
 if(s.value==="Select"){
-
 showModal("All dropdown fields must be selected before generating the report.");
-
 return false;
-
 }
-
 }
-
 return true;
+}
 
+function normalizeRemark(text){
+
+text=text.replace(/\bdy\d+/gi,match=>match.toUpperCase());
+text=text.replace(/\bd8\d+/gi,match=>match.toUpperCase());
+
+text=text.replace(/\b(\d{1,2})([a-z]{3})(\d{2})?\b/gi,(m,d,mon)=>{
+return d.padStart(2,'0')+mon.toUpperCase();
+});
+
+return text;
 }
 
 function generate(){
 
-let flightValue=flight.value.trim();
-let paxValue=pax.value.trim();
-
-if(flightValue===""||paxValue===""||Number(paxValue)===0){
+if(flight.value.trim()===""||pax.value.trim()===""||Number(pax.value)===0){
 showModal("Missing flight details");
 return;
 }
@@ -554,70 +467,58 @@ if(!validateSelects())return;
 let reasonValue=reason.value;
 let reasonExtra=reasonText.value.trim();
 
-if((reasonValue==="Strike"||reasonValue==="Crew"||reasonValue==="Operational"||reasonValue==="Other") && reasonExtra===""){
-showModal("Please specify reason.");
+if((reasonValue==="Strike"||reasonValue==="Crew"||reasonValue==="Operational"||reasonValue==="Other")&&reasonExtra===""){
+showModal("Reason required under set conditions");
 return;
 }
 
 let reasonOutput=reasonValue;
-
-if(reasonExtra!==""){
-reasonOutput+=` / ${reasonExtra}`;
-}
+if(reasonExtra!=="")reasonOutput+=` / ${reasonExtra}`;
 
 let irrValue=irr.value;
-
 let code="";
-
 if(irrValue==="Cancelled")code="CNL";
 if(irrValue==="Delayed")code="DLY";
 if(irrValue==="Diversion")code="DIV";
 
-let header=`${flightValue.toUpperCase()} ${date.value.toUpperCase()} ${code}`;
+let remarkText=remark.value.trim();
+if(remarkText!=="")remarkText=normalizeRemark(remarkText);
+
+let header=`${flight.value.toUpperCase()} ${date.value.toUpperCase()} ${code}`;
 
 let text=
 `${header}
 Reason : ${reasonOutput}
-Pax Figures : ${paxValue}
+Pax Figures : ${pax.value}
 Rebooking : ${rebooking.value}
 Rebooking Solution : ${solution.value}
 Spare AC : ${spare.value}${spare.value==="Not applicable"?" / "+spareText.value:""}
 Wetlease : ${wetlease.value}${wetlease.value==="Not applicable"?" / "+wetleaseText.value:""}`;
 
-if(remark.value.trim()!==""){
-text+=`\nRemark: ${remark.value}`;
+if(remarkText!==""){
+text+=`\nRemark: ${remarkText}`;
 }
 
 output.innerText=text;
 ready.innerText="Report ready";
-
 }
 
 function copyText(){
-
 let txt=output.innerText.trim();
-
 if(txt===""){
 showModal("Nothing to copy.");
 return;
 }
-
 navigator.clipboard.writeText(txt);
-
 }
 
 function resetForm(){
-
 document.querySelectorAll("input").forEach(i=>i.value="");
-
 document.querySelectorAll("select").forEach(s=>s.selectedIndex=0);
-
 output.innerText="";
 ready.innerText="";
 openFlightBox.style.display="none";
-
 reasonText.classList.add("hidden");
-
 }
 
 </script>
