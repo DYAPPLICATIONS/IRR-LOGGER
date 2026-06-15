@@ -210,7 +210,7 @@
 
         <div class="header">
             <h1>IRR Event Logger</h1>
-            <div class="rev">Rev 3.6</div>
+            <div class="rev">Rev 3.7</div>
         </div>
 
         <div>
@@ -233,14 +233,14 @@
             <div class="box" style="width:1000px;">
                 <b>Specify Irregularity</b>
                 <br><br> Irregularity:
-                <select id="irr" class="medium" onchange="updateReasonLabel()">
+                <select id="irr" class="medium" style="width: 100px"  onchange="updateReasonLabel()">
                     <option>Select</option>
                     <option>Cancelled</option>
                     <option>Delayed</option>
                     <option>Diversion</option>
                 </select> &nbsp;&nbsp;
                 <span id="reason-label">Reason for cancellation:</span>
-                <select id="reason" class="medium" onchange="toggleReasonBox()">
+                <select id="reason" class="medium" style="width: 130px" onchange="toggleReasonBox()">
                  <option>Select</option>
                 <option>ATC</option>
                 <option>Bird Strike</option>
@@ -268,21 +268,22 @@
                     <option>Recovery flight arranged</option>
                     <option>Would have caused longer delay</option>
                 </select>
-                <br><br> Spare AC:
-                <select id="spare" class="medium" onchange="toggleSpareBox()">
-                    <option>Select</option>
-                    <option>Used</option>
-                    <option>Not available</option>
-                    <option>Would cause longer final delay</option>
-                    <option>Not applicable</option>
-                </select>
-                <input id="spareText" class="medium hidden" placeholder="Specify reason"> &nbsp;&nbsp; Wetlease:
-                <select id="wetlease" class="medium" onchange="toggleWetleaseBox()">
-                    <option>Select</option>
-                    <option>Wetlease arranged</option>
-                    <option>Not an option. Would cause longer delay.</option>
-                    <option>Not an option due to availability</option>
-                </select>
+             <br><br> Spare AC:
+				<select id="spare" class="medium" style="width: 202px;" onchange="toggleSpareBox()">
+					<option>Select</option>
+					<option>Used</option>
+					<option>Not available</option>
+					<option>Would cause longer final delay</option>
+					<option>Not applicable</option>
+				</select>
+<input id="spareText" class="medium hidden" placeholder="Specify reason"> &nbsp;&nbsp; Wetlease:
+<select id="wetlease" class="medium" style="width: 250px;" onchange="toggleWetleaseBox()">
+    <option>Select</option>
+    <option>Wetlease arranged</option>
+    <option>Not an option. Would cause longer delay.</option>
+    <option>Not an option due to availability</option>
+</select>
+
                 <input id="wetleaseText" class="medium hidden" placeholder="Specify reason">
                 <br><br> Remark (Freetext)
                 <br>
