@@ -10,13 +10,11 @@
             background-size: 6px 6px;
             padding: 30px;
         }
-
         .wrapper {
             width: 1100px;
             margin: auto;
             position: relative;
         }
-
         .logo {
             position: absolute;
             top: 0;
@@ -24,11 +22,9 @@
             text-align: center;
             width: 220px;
         }
-
         .logo img {
             width: 220px;
         }
-
         .clock {
             margin-top: 10px;
             font-size: 16px;
@@ -36,11 +32,9 @@
             color: darkblue;
             text-align: center;
         }
-
         .hidden {
             display: none;
         }
-
         /* Container for all dynamic warning banners */
         #warning-container {
             position: absolute;
@@ -49,7 +43,6 @@
             width: 220px;
             z-index: 1000;
         }
-
         .warning-banner {
             display: block; /* Banners are visible by default when added */
             margin-top: 8px;
@@ -61,7 +54,6 @@
             position: relative;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
-
         .warning-banner .close {
             position: absolute;
             right: 8px;
@@ -69,41 +61,34 @@
             cursor: pointer;
             font-weight: bold;
         }
-
         .open-flight-box {
             display: none;
             margin-top: 10px;
             text-align: center;
         }
-
         .header {
             text-align: center;
             margin-bottom: 40px;
         }
-
         h1 {
             margin-bottom: 0;
         }
-
         .rev {
             font-style: italic;
             margin-bottom: 20px;
         }
-
         .section-number {
             background: yellow;
             display: inline-block;
             padding: 2px 8px;
             font-weight: bold;
         }
-
         .box {
             background: #d9d9d9;
             border: 2px solid black;
             padding: 15px;
             margin-top: 10px;
         }
-
         input,
         select {
             background: #ffc000;
@@ -111,27 +96,21 @@
             padding: 3px;
             font-family: Calibri;
         }
-
         input.small {
             width: 100px;
         }
-
         input.medium {
             width: 160px;
         }
-
         input.long {
             width: 450px;
         }
-
         select.medium {
             width: 180px;
         }
-
         select.long {
             width: 520px;
         }
-
         button {
             padding: 6px 14px;
             font-weight: bold;
@@ -139,30 +118,24 @@
             border: 1px solid black;
             transition: transform .05s ease;
         }
-
         button:active {
             transform: scale(1.08);
         }
-
         .reset-btn {
             background: red;
             color: white;
         }
-
         .generate-btn {
             background: #92d050;
         }
-
         .copy-btn {
             background: #bdd7ee;
         }
-
         .green-text {
             color: green;
             font-style: italic;
             margin-left: 15px;
         }
-
         .output-box {
             background: #efefef;
             border: 2px solid #1f7a3f;
@@ -172,7 +145,6 @@
             white-space: pre-wrap;
             font-family: "Courier New", monospace;
         }
-
         .modal-overlay {
             display: none;
             position: fixed;
@@ -182,7 +154,6 @@
             height: 100%;
             background: rgba(0, 0, 0, .4);
         }
-
         .modal-box {
             background: white;
             width: 350px;
@@ -193,7 +164,6 @@
         }
     </style>
 </head>
-
 <body>
     <div class="wrapper">
         <div class="logo">
@@ -207,12 +177,10 @@
                 <button onclick="openBono()">BONO</button>
             </div>
         </div>
-
-        <div class="header">
+      <div class="header">
             <h1>IRR Event Logger</h1>
-            <div class="rev">Rev 3.7</div>
+            <div class="rev">Rev 3.8</div>
         </div>
-
         <div>
             <span class="section-number">1)</span>
             <div class="box" style="width:500px;">
@@ -283,7 +251,6 @@
     <option>Not an option. Would cause longer delay.</option>
     <option>Not an option due to availability</option>
 </select>
-
                 <input id="wetleaseText" class="medium hidden" placeholder="Specify reason">
                 <br><br> Remark (Freetext)
                 <br>
@@ -333,7 +300,6 @@
         const openFlightBox = document.getElementById('openFlightBox');
         const modalMessage = document.getElementById('modal-message');
         const modal = document.getElementById('modal');
-
 
         function updateClock() {
             let now = new Date();
@@ -386,7 +352,6 @@
             closeSpan.className = 'close';
             closeSpan.innerHTML = '&times;';
             closeSpan.onclick = () => banner.remove();
-
             banner.appendChild(textNode);
             banner.appendChild(closeSpan);
             
@@ -529,11 +494,13 @@
                 return;
             }
             // --- END OF VALIDATION ---
-
             let reasonValue = reason.value;
             let reasonExtra = reasonText.value.trim();
             let reasonOutput = reasonValue;
-            if (reasonExtra !== "") reasonOutput += ` / ${reasonExtra}`;
+            if (reasonExtra !== "") {
+                let capitalizedExtra = reasonExtra.charAt(0).toUpperCase() + reasonExtra.slice(1);
+                reasonOutput += ` / ${capitalizedExtra}`;
+            }
 
             let irrValue = irr.value;
             let code = "";
@@ -545,16 +512,20 @@
             if (remarkTextValue !== "") remarkTextValue = normalizeRemark(remarkTextValue);
 
             let header = `${flight.value.toUpperCase()} ${date.value.toUpperCase()} ${code}`;
+
             let spareOutput = spare.value;
             if (spare.value === "Not applicable" && spareText.value.trim() !== "") {
-                spareOutput += " / " + spareText.value;
+                let spareTrimmed = spareText.value.trim();
+                let spareCapitalized = spareTrimmed.charAt(0).toUpperCase() + spareTrimmed.slice(1);
+                spareOutput += " / " + spareCapitalized;
             }
             
             let wetleaseOutput = wetlease.value;
-             if (wetlease.value === "Not applicable" && wetleaseText.value.trim() !== "") {
-                wetleaseOutput += " / " + wetleaseText.value;
+            if (wetlease.value === "Not applicable" && wetleaseText.value.trim() !== "") {
+                let wetleaseTrimmed = wetleaseText.value.trim();
+                let wetleaseCapitalized = wetleaseTrimmed.charAt(0).toUpperCase() + wetleaseTrimmed.slice(1);
+                wetleaseOutput += " / " + wetleaseCapitalized;
             }
-
             let text =
                 `${header}
 Reason : ${reasonOutput}
@@ -567,7 +538,6 @@ Wetlease : ${wetleaseOutput}`;
             if (remarkTextValue !== "") {
                 text += `\nRemark: ${remarkTextValue}`;
             }
-
             output.innerText = text;
             ready.innerText = "Report ready";
         }
@@ -595,4 +565,3 @@ Wetlease : ${wetleaseOutput}`;
     </script>
 </body>
 </html>
- 
