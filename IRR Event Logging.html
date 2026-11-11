@@ -179,7 +179,7 @@
         </div>
       <div class="header">
             <h1>IRR Event Logger</h1>
-            <div class="rev">Rev 4.1</div>
+            <div class="rev">Rev 4.2</div>
         </div>
         <div>
             <span class="section-number">1)</span>
@@ -470,7 +470,7 @@
                 showCustomWarning("No Spare A/C option has been set.");
                 return;
             }
-            if (spare.value === "Not applicable" && spareText.value.trim() === "") {
+            if (spare.value === "Would cause longer final delay" && spareText.value.trim() === "") {
                 showCustomWarning("Reason for longer final delay must be specified. Please fill out the relevant field.");
                 return;
             }
@@ -495,7 +495,7 @@
             if (remarkTextValue !== "") remarkTextValue = normalizeRemark(remarkTextValue);
             let header = `${flight.value.toUpperCase()} ${date.value.toUpperCase()} ${code}`;
             let spareOutput = spare.value;
-            if (spare.value === "Not applicable" && spareText.value.trim() !== "") {
+            if (spare.value === "Would Cause longer final delay" && spareText.value.trim() !== "") {
                 let spareTrimmed = spareText.value.trim();
                 let spareCapitalized = spareTrimmed.charAt(0).toUpperCase() + spareTrimmed.slice(1);
                 spareOutput += " / " + spareCapitalized;
