@@ -179,7 +179,7 @@
         </div>
       <div class="header">
             <h1>IRR Event Logger</h1>
-            <div class="rev">Rev 3.9</div>
+            <div class="rev">Rev 4.0</div>
         </div>
         <div>
             <span class="section-number">1)</span>
@@ -242,7 +242,6 @@
 					<option>Used</option>
 					<option>Not available</option>
 					<option>Would cause longer final delay</option>
-					<option>Not applicable</option>
 				</select>
 <input id="spareText" class="medium hidden" placeholder="Specify reason"> &nbsp;&nbsp; Wetlease:
 <select id="wetlease" class="medium" style="width: 250px;" onchange="toggleWetleaseBox()">
@@ -324,7 +323,7 @@
             }
         }
         function toggleSpareBox() {
-            spareText.classList.toggle("hidden", spare.value !== "Not applicable");
+            spareText.classList.toggle("hidden", spare.value !== "Would cause longer final delay");
         }
         function toggleWetleaseBox() {
             wetleaseText.classList.toggle("hidden", wetlease.value !== "Not applicable");
@@ -470,7 +469,7 @@
                 return;
             }
             if (spare.value === "Not applicable" && spareText.value.trim() === "") {
-                showCustomWarning("Spare Aircraft (Spare AC) reason needs to be specified. Please fill out the relevant field.");
+                showCustomWarning("Reason for longer final delay must be specified. Please fill out the relevant field.");
                 return;
             }
             if (wetlease.value === "Select") {
